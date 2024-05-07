@@ -79,9 +79,6 @@ console.log(padString('qwerty', 4, '0')); // 'qwerty'
 // и false, если строка длиннее. Эта функция нам пригодится для валидации формы.
 
 
-function checkStringLength(inputString, maxLength) {
-  return inputString.length <= maxLength;
-}
 
 function checkStrLen(inputString, maxLength) {
   return inputString.trim().length <= maxLength;
