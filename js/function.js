@@ -47,8 +47,7 @@ const padString = (str, minLength, addChars) => {
     const numCharsNeed = minLength - str.length;
     const numAddChars = Math.floor(numCharsNeed / addChars.length);
     const remainingChars = numCharsNeed % addChars.length;
-    const paddStr = addChars.slice(0, remainingChars) + addChars.repeat(numAddChars) + str;
-    return paddStr;
+    return addChars.slice(0, remainingChars) + addChars.repeat(numAddChars) + str;
   }
 };
 
