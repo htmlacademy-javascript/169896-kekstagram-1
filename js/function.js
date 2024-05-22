@@ -4,10 +4,10 @@
 
 const isPalindrome = (str) => {
   const cleanStr = str.toLowerCase().replaceAll(' ', '');
-  const length = cleanStr.length;
+  const length = Math.floor(cleanStr.length / 2);
 
-  for (let i = 0; i < Math.floor(length / 2); i++) {
-    if (cleanStr[i] !== cleanStr[length - 1 - i]) {
+  for (let i = 0; i < length; i++) {
+    if (cleanStr[i] !== cleanStr[cleanStr.length - 1 - i]) {
       return false;
     }
   }
