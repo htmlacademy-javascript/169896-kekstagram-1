@@ -1,14 +1,10 @@
 const MAX_PICTURE = 25;
-const avatar = 6;
-
+const MAX_AVATAR = 6;
 const MIN_LIKES = 15;
 const MAX_LIKES = 200;
-
 const MIN_COMMENTS = 5;
 const MAX_COMMENTS = 20;
-
-
-const descriptions = [
+const DESCRIPTIONS = [
   'Семья',
   'На природе',
   'Отдых',
@@ -16,7 +12,7 @@ const descriptions = [
   'Скучные будни',
   'Тренировка'
 ];
-const names = [
+const NAMES = [
   'Иван Дорн',
   'Джон Сина',
   'Мария Шукшина',
@@ -26,7 +22,7 @@ const names = [
   'Люда Какаянибудь',
   'Златан Ибрагимович',
 ];
-const messages = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -39,6 +35,7 @@ const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
   const result = Math.random() * (upper - lower + 1) + lower;
+
   return Math.floor(result);
 };
 
@@ -47,27 +44,26 @@ const getRandomArrayElement = (elements) => elements[getRandomInteger(0, element
 
 const createComment = (id) => ({
   id,
-  avatar: `avatars/${getRandomInteger(1, avatar)}.jpg`,
-  message: getRandomArrayElement(messages),
-  name: getRandomArrayElement(names),
+  avatar: `avatars/${getRandomInteger(1, MAX_AVATAR)}.jpg`,
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(NAMES),
 });
 
 const createPicture = (id) => ({
   id,
   url: `photos/${id}.jpg`,
-  description: getRandomArrayElement(descriptions),
+  description: getRandomArrayElement(DESCRIPTIONS),
   likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
   comments: Array.from(
     { length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS) },
-    (_, comentIndex) =>
-      createComment(comentIndex + 1)
+    (_, i) =>
+      createComment(i++)
   ),
 });
 
 const createGallery = () =>
-  Array.from({ length: MAX_PICTURE }, (_, pictureIndex) =>
-    createPicture(pictureIndex + 1)
+  Array.from({ length: MAX_PICTURE }, (_, i) =>
+    createPicture(i++)
   );
 
-const photos = createGallery();
-console.log(photos);
+createGallery();
