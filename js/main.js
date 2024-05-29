@@ -1,4 +1,6 @@
-export { createPicture } from './data.js';
-export { createComment } from './data.js';
-export { createGallery } from './gallery.js';
+import './data.js';
+import './util.js';
+import './gallery.js';
+import { createGallery } from './gallery.js';
 
+createGallery();

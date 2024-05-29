@@ -1,4 +1,5 @@
-import { getRandomInteger, getRandomArrayElement } from './until.js';
+import './util.js';
+import './gallery.js';
 
 const MAX_PICTURE = 25;
 const MAX_AVATAR = 6;
@@ -33,29 +34,13 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-
-const createComment = (id) => ({
-  id,
-  avatar: `avatars/${getRandomInteger(1, MAX_AVATAR)}.jpg`,
-  message: getRandomArrayElement(MESSAGES),
-  name: getRandomArrayElement(NAMES),
-});
-
-const createPicture = (id) => ({
-  id,
-  url: `photos/${id}.jpg`,
-  description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-  comments: Array.from(
-    { length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS) },
-    (_, i) =>
-      createComment(i++)
-  ),
-});
-
-const createGallery = () =>
-  Array.from({ length: MAX_PICTURE }, (_, i) =>
-    createPicture(i++)
-  );
-
-createGallery();
+export { MAX_PICTURE,
+  MAX_AVATAR,
+  MIN_LIKES,
+  MAX_LIKES,
+  MIN_COMMENTS,
+  MAX_COMMENTS,
+  DESCRIPTIONS,
+  NAMES,
+  MESSAGES
+};
