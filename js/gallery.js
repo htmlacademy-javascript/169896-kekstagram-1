@@ -9,9 +9,7 @@ import {
   NAMES,
   MESSAGES
 } from './data.js';
-
-import { getRandomInteger, getRandomArrayElement } from './util.js';
-
+import { getRandomInteger, getRandomArrayElement } from './utils.js';
 
 const createComment = (id) => ({
   id,

@@ -1,13 +1,11 @@
-import './util.js';
-import './gallery.js';
 
-const MAX_PICTURE = 25;
-const MAX_AVATAR = 6;
-const MIN_LIKES = 15;
-const MAX_LIKES = 200;
-const MIN_COMMENTS = 5;
-const MAX_COMMENTS = 20;
-const DESCRIPTIONS = [
+export const MAX_PICTURE = 25;
+export const MAX_AVATAR = 6;
+export const MIN_LIKES = 15;
+export const MAX_LIKES = 200;
+export const MIN_COMMENTS = 5;
+export const MAX_COMMENTS = 20;
+export const DESCRIPTIONS = [
   'Семья',
   'На природе',
   'Отдых',
@@ -15,7 +13,7 @@ const DESCRIPTIONS = [
   'Скучные будни',
   'Тренировка'
 ];
-const NAMES = [
+export const NAMES = [
   'Иван Дорн',
   'Джон Сина',
   'Мария Шукшина',
@@ -25,7 +23,7 @@ const NAMES = [
   'Люда Какаянибудь',
   'Златан Ибрагимович',
 ];
-const MESSAGES = [
+export const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
@@ -34,13 +32,3 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-export { MAX_PICTURE,
-  MAX_AVATAR,
-  MIN_LIKES,
-  MAX_LIKES,
-  MIN_COMMENTS,
-  MAX_COMMENTS,
-  DESCRIPTIONS,
-  NAMES,
-  MESSAGES
-};
