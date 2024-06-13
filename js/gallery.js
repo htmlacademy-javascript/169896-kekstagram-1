@@ -50,9 +50,10 @@ const createPictureElement = ({ url, description, likes, comments }) => {
   return thumbnail;
 };
 
-export const renderGallery = (photos) => {
+export const renderGallery = (arrayPhotos) => {
   const thumbnailsFragment = document.createDocumentFragment();
-  photos.forEach((photoData) => {
+
+  arrayPhotos.forEach((photoData) => {
     const thumbnail = createPictureElement(photoData);
 
     thumbnailsFragment.append(thumbnail);
@@ -61,5 +62,5 @@ export const renderGallery = (photos) => {
   gallery.append(thumbnailsFragment);
 };
 
-export const photos = createGallery();
-renderGallery(photos);
+const arrayPictures = createGallery();
+renderGallery(arrayPictures);
