@@ -1,4 +1,2 @@
 import './gallery.js';
 
-renderGallery();
-
