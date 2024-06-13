@@ -62,4 +62,4 @@ export const renderGallery = (photos) => {
 };
 
 export const photos = createGallery();
-
+renderGallery(photos);
