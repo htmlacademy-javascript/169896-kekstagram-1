@@ -34,3 +34,4 @@ export const createGallery = () =>
   Array.from({ length: MAX_PICTURE }, (_, i) =>
     createPicture(i++)
   );
+
