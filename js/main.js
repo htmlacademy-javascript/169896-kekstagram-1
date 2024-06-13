@@ -1,4 +1,4 @@
 import './gallery.js';
 
-createGallery();
-renderGallery();
+renderGallery(photos);
+
