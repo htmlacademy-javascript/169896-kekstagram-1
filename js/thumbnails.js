@@ -1,6 +1,6 @@
 import { arrayPhotos } from './data.js';
 
-const thumbnailsList = document.querySelector('.pictures');
+const gallery = document.querySelector('.pictures');
 const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const thumbnailsFragment = document.createDocumentFragment();
 
@@ -22,7 +22,5 @@ export const renderThumbnails = () => {
     thumbnailsFragment.append(thumbnail);
   });
 
-  thumbnailsList.append(thumbnailsFragment);
+  gallery.append(thumbnailsFragment);
 };
-
-
