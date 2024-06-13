@@ -1,6 +1,4 @@
-import { createGallery } from './gallery.js';
-import { renderThumbnails } from './thumbnails.js';
-
+import './gallery.js';
 
 createGallery();
-renderThumbnails();
+renderGallery();

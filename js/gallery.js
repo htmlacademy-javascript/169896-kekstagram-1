@@ -10,7 +10,6 @@ import {
   MESSAGES
 } from './data.js';
 import { getRandomInteger, getRandomArrayElement } from './utils.js';
-import { arrayPhotos } from './data.js';
 
 const createComment = (id) => ({
   id,
@@ -36,10 +35,8 @@ export const createGallery = () =>
     createPicture(i++)
   );
 
-
 const gallery = document.querySelector('.pictures');
 const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
-
 
 const createPictureElement = ({ url, description, likes, comments }) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
@@ -53,12 +50,16 @@ const createPictureElement = ({ url, description, likes, comments }) => {
   return thumbnail;
 };
 
-export const renderThumbnails = () => {
+export const renderGallery = (arrayPhotos) => {
   const thumbnailsFragment = document.createDocumentFragment();
   arrayPhotos.forEach((photoData) => {
     const thumbnail = createPictureElement(photoData);
+
     thumbnailsFragment.append(thumbnail);
   });
 
   gallery.append(thumbnailsFragment);
 };
+
+const arrayPhotos = [];
+renderGallery(arrayPhotos);
