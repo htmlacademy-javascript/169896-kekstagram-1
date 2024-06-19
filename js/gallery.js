@@ -10,6 +10,7 @@ import {
   MESSAGES
 } from './data.js';
 import { getRandomInteger, getRandomArrayElement } from './utils.js';
+import { openBigPicture } from './big-picture.js';
 
 const createComment = (id) => ({
   id,
@@ -36,6 +37,9 @@ export const createGallery = () =>
   );
 
 const gallery = document.querySelector('.pictures');
+gallery.addEventListener('click', (evt) => {
+  openBigPicture(evt.target);
+});
 const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
 const createPictureElement = ({ url, description, likes, comments }) => {
@@ -64,3 +68,4 @@ export const renderGallery = (arrayPhotos) => {
 
 const arrayPictures = createGallery();
 renderGallery(arrayPictures);
+
