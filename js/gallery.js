@@ -12,6 +12,9 @@ import {
 import { getRandomInteger, getRandomArrayElement } from './utils.js';
 import { openBigPicture } from './big-picture.js';
 
+const gallery = document.querySelector('.pictures');
+const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
+
 const createComment = (id) => ({
   id,
   avatar: `avatars/${getRandomInteger(1, MAX_AVATAR)}.jpg`,
@@ -36,20 +39,18 @@ export const createGallery = () =>
     createPicture(i++)
   );
 
-const gallery = document.querySelector('.pictures');
 gallery.addEventListener('click', (evt) => {
   openBigPicture(evt.target);
 });
-const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-const createPictureElement = ({ url, description, likes, comments }) => {
+const createPictureElement = ({ url, description, likes, comments, id }) => {
   const thumbnail = thumbnailTemplate.cloneNode(true);
-  const thumbnailsImage = thumbnail.querySelector('.picture__img');
 
-  thumbnailsImage.src = url;
-  thumbnailsImage.alt = description;
+  thumbnail.querySelector('.picture__img').src = url;
+  thumbnail.querySelector('.picture__img').alt = description;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.dataset.id = id;
 
   return thumbnail;
 };
@@ -66,6 +67,6 @@ export const renderGallery = (arrayPhotos) => {
   gallery.append(thumbnailsFragment);
 };
 
-const arrayPictures = createGallery();
-renderGallery(arrayPictures);
+const pictureList = createGallery();
+renderGallery(pictureList);
 
