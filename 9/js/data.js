@@ -3,7 +3,7 @@ export const MAX_PICTURE = 25;
 export const MAX_AVATAR = 6;
 export const MIN_LIKES = 15;
 export const MAX_LIKES = 200;
-export const MIN_COMMENTS = 5;
+
 export const MAX_COMMENTS = 20;
 export const DESCRIPTIONS = [
   'Семья',

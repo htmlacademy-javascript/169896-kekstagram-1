@@ -12,6 +12,10 @@ import {
 import { getRandomInteger, getRandomArrayElement } from './utils.js';
 import { openBigPicture } from './big-picture.js';
 
+const template = document.querySelector('#picture').content.querySelector('.picture');
+const gallery = document.querySelector('.pictures');
+
+
 const createComment = (id) => ({
   id,
   avatar: `avatars/${getRandomInteger(1, MAX_AVATAR)}.jpg`,
@@ -31,41 +35,56 @@ const createPicture = (id) => ({
   ),
 });
 
-export const createGallery = () =>
+const createGallery = () =>
   Array.from({ length: MAX_PICTURE }, (_, i) =>
     createPicture(i++)
   );
 
-const gallery = document.querySelector('.pictures');
-gallery.addEventListener('click', (evt) => {
-  openBigPicture(evt.target);
-});
-const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const createPictureElement = ({ url, description, likes, comments, id }) => {
+  const thumbnail = template.cloneNode(true);
 
-const createPictureElement = ({ url, description, likes, comments }) => {
-  const thumbnail = thumbnailTemplate.cloneNode(true);
-  const thumbnailsImage = thumbnail.querySelector('.picture__img');
-
-  thumbnailsImage.src = url;
-  thumbnailsImage.alt = description;
+  thumbnail.querySelector('.picture__img').src = url;
+  thumbnail.querySelector('.picture__img').alt = description;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.dataset.id = id;
 
   return thumbnail;
 };
 
-export const renderGallery = (arrayPhotos) => {
-  const thumbnailsFragment = document.createDocumentFragment();
+export const renderGallery = (pictures) => {
+  const fragment = document.createDocumentFragment();
 
-  arrayPhotos.forEach((photoData) => {
-    const thumbnail = createPictureElement(photoData);
+  pictures.forEach((picture) => {
+    const pictureElement = createPictureElement(picture);
 
-    thumbnailsFragment.append(thumbnail);
+    fragment.append(pictureElement);
   });
 
-  gallery.append(thumbnailsFragment);
+  gallery.append(fragment);
 };
 
-const arrayPictures = createGallery();
-renderGallery(arrayPictures);
+const pictureList = createGallery();
+
+gallery.addEventListener('click', (evt) => {
+  const thumbnailListener = evt.target.closest('[data-id]');
+
+  if (!thumbnailListener) {
+    return;
+  }
+
+  const pictureData = pictureList.find(
+    (item) => item.id === +thumbnailListener.dataset.id
+  );
+
+  if (!pictureData) {
+
+    return;
+  }
+
+  openBigPicture(pictureData);
+});
+
+
+renderGallery(pictureList);
 
