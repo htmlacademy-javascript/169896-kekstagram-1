@@ -12,8 +12,9 @@ import {
 import { getRandomInteger, getRandomArrayElement } from './utils.js';
 import { openBigPicture } from './big-picture.js';
 
+const template = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
-const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
+
 
 const createComment = (id) => ({
   id,
@@ -34,17 +35,13 @@ const createPicture = (id) => ({
   ),
 });
 
-export const createGallery = () =>
+const createGallery = () =>
   Array.from({ length: MAX_PICTURE }, (_, i) =>
     createPicture(i++)
   );
 
-gallery.addEventListener('click', (evt) => {
-  openBigPicture(evt.target);
-});
-
 const createPictureElement = ({ url, description, likes, comments, id }) => {
-  const thumbnail = thumbnailTemplate.cloneNode(true);
+  const thumbnail = template.cloneNode(true);
 
   thumbnail.querySelector('.picture__img').src = url;
   thumbnail.querySelector('.picture__img').alt = description;
@@ -55,18 +52,39 @@ const createPictureElement = ({ url, description, likes, comments, id }) => {
   return thumbnail;
 };
 
-export const renderGallery = (arrayPhotos) => {
-  const thumbnailsFragment = document.createDocumentFragment();
+export const renderGallery = (pictures) => {
+  const fragment = document.createDocumentFragment();
 
-  arrayPhotos.forEach((photoData) => {
-    const thumbnail = createPictureElement(photoData);
+  pictures.forEach((picture) => {
+    const pictureElement = createPictureElement(picture);
 
-    thumbnailsFragment.append(thumbnail);
+    fragment.append(pictureElement);
   });
 
-  gallery.append(thumbnailsFragment);
+  gallery.append(fragment);
 };
 
 const pictureList = createGallery();
+
+gallery.addEventListener('click', (evt) => {
+  const thumbnailListener = evt.target.closest('[data-id]');
+
+  if (!thumbnailListener) {
+    return;
+  }
+
+  const pictureData = pictureList.find(
+    (item) => item.id === +thumbnailListener.dataset.id
+  );
+
+  if (!pictureData) {
+
+    return;
+  }
+
+  openBigPicture(pictureData);
+});
+
+
 renderGallery(pictureList);
 
