@@ -67,14 +67,14 @@ export const renderGallery = (pictures) => {
 
 
 gallery.addEventListener('click', (evt) => {
-  const thumbnailListener = evt.target.closest('[data-id]');
+  const thumbnail = evt.target.closest('[data-id]');
 
-  if (!thumbnailListener) {
+  if (!thumbnail) {
     return;
   }
 
   const pictureData = pictureList.find(
-    (item) => item.id === +thumbnailListener.dataset.id
+    (item) => item.id === +thumbnail.dataset.id
   );
 
   if (!pictureData) {

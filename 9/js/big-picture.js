@@ -1,6 +1,6 @@
 import { isEscapeKey } from './utils.js';
 
-const PIC_COMMENTS = 5;
+const MIN_COMMENTS = 5;
 
 const bigPicture = document.querySelector('.big-picture');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
@@ -9,15 +9,12 @@ const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsToShowCount = bigPicture.querySelector('.social__comment-count');
 const showCommentsCount = commentsToShowCount.querySelector('.show-comments-count');
 
-const arrayComments = [];
-const arrayPictureComments = arrayComments.length;
+const arrayPictureComments = [].length;
 let visibleComments = 0;
 
 const createComment = ({ avatar, name, message }) => {
-  const comment = document.createElement('li');
-  comment.innerHTML =
-  '<img class="social__picture" src="" alt="" width="35" height="35">';
-  comment.classList.add('social__comment');
+  const template = document.getElementById('comment-template');
+  const comment = template.content.cloneNode(true);
 
   comment.querySelector('.social__picture').src = avatar;
   comment.querySelector('.social__picture').alt = name;
@@ -27,7 +24,7 @@ const createComment = ({ avatar, name, message }) => {
 };
 
 const renderComments = () => {
-  visibleComments += PIC_COMMENTS;
+  visibleComments += MIN_COMMENTS;
 
   if (visibleComments >= arrayPictureComments) {
     commentsLoader.classList.add('hidden');
@@ -39,18 +36,15 @@ const renderComments = () => {
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < visibleComments; i++) {
     const commentElement = createComment(arrayPictureComments[i]);
-
     fragment.append(commentElement);
   }
 
-  commentsContainer.innerHTML = '';
-  commentsContainer.append(fragment);
+  commentsContainer.replaceChildren(fragment);
 
   showCommentsCount.textContent = visibleComments;
 };
 
 const onCommentsLoaderClick = () => renderComments();
-
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
@@ -69,7 +63,7 @@ export const openBigPicture = (picture) => {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
 
-  bigPicture.querySelector('.big-picture__img img').src = picture.src;
+  bigPicture.querySelector('.big-picture__img img').src = picture.url;
   bigPicture.querySelector('.likes-count').textContent = picture.likes;
   bigPicture.querySelector('.comments-count').textContent = picture.comments;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
