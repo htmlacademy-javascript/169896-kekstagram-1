@@ -12,9 +12,8 @@ import {
 import { getRandomInteger, getRandomArrayElement } from './utils.js';
 import { openBigPicture } from './big-picture.js';
 
-const template = document.querySelector('#picture').content.querySelector('.picture');
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
-
 
 const createComment = (id) => ({
   id,
@@ -35,13 +34,15 @@ const createPicture = (id) => ({
   ),
 });
 
+
 const createGallery = () =>
   Array.from({ length: MAX_PICTURE }, (_, i) =>
-    createPicture(i++)
-  );
+    createPicture(i++));
+
+const pictureList = createGallery(25);
 
 const createPictureElement = ({ url, description, likes, comments, id }) => {
-  const thumbnail = template.cloneNode(true);
+  const thumbnail = pictureTemplate.cloneNode(true);
 
   thumbnail.querySelector('.picture__img').src = url;
   thumbnail.querySelector('.picture__img').alt = description;
@@ -64,7 +65,6 @@ export const renderGallery = (pictures) => {
   gallery.append(fragment);
 };
 
-const pictureList = createGallery();
 
 gallery.addEventListener('click', (evt) => {
   const thumbnailListener = evt.target.closest('[data-id]');
@@ -78,7 +78,6 @@ gallery.addEventListener('click', (evt) => {
   );
 
   if (!pictureData) {
-
     return;
   }
 

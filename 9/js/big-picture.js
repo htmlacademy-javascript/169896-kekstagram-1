@@ -1,18 +1,17 @@
 import { isEscapeKey } from './utils.js';
 
+const PIC_COMMENTS = 5;
+
 const bigPicture = document.querySelector('.big-picture');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsToShowCount = bigPicture.querySelector('.social__comment-count');
 const showCommentsCount = commentsToShowCount.querySelector('.show-comments-count');
-const commentsCount = bigPicture.querySelector('.comments-count');
 
-
-const MIN_COMMENTS = 5;
 const arrayComments = [];
 const arrayPictureComments = arrayComments.length;
-let viewComments = 0;
+let visibleComments = 0;
 
 const createComment = ({ avatar, name, message }) => {
   const comment = document.createElement('li');
@@ -28,18 +27,17 @@ const createComment = ({ avatar, name, message }) => {
 };
 
 const renderComments = () => {
+  visibleComments += PIC_COMMENTS;
 
-  viewComments += MIN_COMMENTS;
-
-  if (viewComments >= arrayPictureComments) {
+  if (visibleComments >= arrayPictureComments) {
     commentsLoader.classList.add('hidden');
-    viewComments = arrayPictureComments;
+    visibleComments = arrayPictureComments;
   } else {
     commentsLoader.classList.remove('hidden');
   }
 
   const fragment = document.createDocumentFragment();
-  for (let i = 0; i < viewComments; i++) {
+  for (let i = 0; i < visibleComments; i++) {
     const commentElement = createComment(arrayPictureComments[i]);
 
     fragment.append(commentElement);
@@ -48,27 +46,23 @@ const renderComments = () => {
   commentsContainer.innerHTML = '';
   commentsContainer.append(fragment);
 
-  showCommentsCount.querySelector('.show-comments-count').textContent = viewComments;
-  commentsCount.querySelector('.comments-count').textContent = arrayPictureComments;
+  showCommentsCount.textContent = visibleComments;
 };
 
-renderComments();
+const onCommentsLoaderClick = () => renderComments();
 
-const onTapEscKeydown = (evt) => {
+const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeBigPicture();
   }
 };
 
-const onCloseButtonClick = () => {
-  closeBigPicture();
-};
-
 function closeBigPicture() {
   bigPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  document.removeEventListener('keydown', onTapEscKeydown);
+  document.removeEventListener('keydown', onPopupEscKeydown);
+  commentsLoader.removeEventListener('click', onCommentsLoaderClick);
 }
 
 export const openBigPicture = (picture) => {
@@ -80,6 +74,11 @@ export const openBigPicture = (picture) => {
   bigPicture.querySelector('.comments-count').textContent = picture.comments;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
 
-  closeButton.addEventListener('click', onCloseButtonClick);
-  document.addEventListener('keydown', onTapEscKeydown);
+  renderComments();
+
+  closeButton.addEventListener('click', closeBigPicture);
+  document.addEventListener('keydown', onPopupEscKeydown);
+  commentsLoader.addEventListener('click', onCommentsLoaderClick);
 };
+
+
