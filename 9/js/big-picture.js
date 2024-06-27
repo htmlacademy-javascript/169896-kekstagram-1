@@ -1,6 +1,9 @@
+
+// import { MAX_COMMENTS } from './data.js';
 import { isEscapeKey } from './utils.js';
 
 const MIN_COMMENTS = 5;
+const DEFAULT_COMMENT_COUNT = 0;
 
 const bigPicture = document.querySelector('.big-picture');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
@@ -8,7 +11,7 @@ const commentsLoader = bigPicture.querySelector('.comments-loader');
 const commentsContainer = bigPicture.querySelector('.social__comments');
 const commentsToShowCount = bigPicture.querySelector('.social__comment-count');
 const showCommentsCount = commentsToShowCount.querySelector('.show-comments-count');
-const body = document.body;
+const commentsCount = commentsToShowCount.querySelector('.comments-count');
 
 let visibleComments = 0;
 let activePictureComments = [];
@@ -42,16 +45,17 @@ const renderComments = () => {
   });
 
   commentsContainer.innerHTML = '';
-  commentsContainer.append(fragment);
+  commentsContainer.replaceChildren(fragment);
   showCommentsCount.textContent = visibleComments;
+  // commentsCount.textContent = MAX_COMMENTS;
 };
 
 const resetComments = () => {
-  visibleComments = 0;
+  visibleComments = DEFAULT_COMMENT_COUNT ;
   activePictureComments = [];
   commentsContainer.innerHTML = '';
-  commentsToShowCount.textContent = '0';
-  showCommentsCount.textContent = '0';
+  commentsToShowCount.textContent = DEFAULT_COMMENT_COUNT ;
+  showCommentsCount.textContent = DEFAULT_COMMENT_COUNT ;
 };
 
 const onCommentsLoaderClick = () => renderComments();
@@ -65,13 +69,14 @@ const onDocumentKeydown = (evt) => {
 
 export const openBigPicture = (picture) => {
   bigPicture.classList.remove('hidden');
-  body.classList.add('modal-open');
+  document.body.classList.add('modal-open');
 
   bigPicture.querySelector('.big-picture__img img').src = picture.url;
   bigPicture.querySelector('.likes-count').textContent = picture.likes;
   bigPicture.querySelector('.comments-count').textContent = picture.comments;
   bigPicture.querySelector('.social__caption').textContent = picture.description;
-  picture = activePictureComments;
+  activePictureComments = picture.comments;
+  commentsCount.textContent = activePictureComments.length;
 
   renderComments();
 
@@ -82,7 +87,7 @@ export const openBigPicture = (picture) => {
 
 function closeBigPicture() {
   bigPicture.classList.add('hidden');
-  body.classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   commentsLoader.removeEventListener('click', onCommentsLoaderClick);
 
