@@ -17,7 +17,7 @@ const gallery = document.querySelector('.pictures');
 
 const createComment = (id) => ({
   id,
-  avatar: `avatars/${getRandomInteger(1, MAX_AVATAR)}.jpg`,
+  avatar: `img/avatar-${getRandomInteger(1, MAX_AVATAR)}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
 });
@@ -30,14 +30,13 @@ const createPicture = (id) => ({
   comments: Array.from(
     { length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS) },
     (_, i) =>
-      createComment(i++)
-  ),
+      createComment(i++)),
 });
 
 
 const createGallery = () =>
   Array.from({ length: MAX_PICTURE }, (_, i) =>
-    createPicture(i++));
+    createPicture(i));
 
 const pictureList = createGallery(25);
 
