@@ -10,10 +10,14 @@ import {
   MESSAGES
 } from './data.js';
 import { getRandomInteger, getRandomArrayElement } from './utils.js';
+import { openBigPicture } from './big-picture.js';
+
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const gallery = document.querySelector('.pictures');
 
 const createComment = (id) => ({
   id,
-  avatar: `avatars/${getRandomInteger(1, MAX_AVATAR)}.jpg`,
+  avatar: `img/avatar-${getRandomInteger(1, MAX_AVATAR)}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
 });
@@ -26,41 +30,59 @@ const createPicture = (id) => ({
   comments: Array.from(
     { length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS) },
     (_, i) =>
-      createComment(i++)
-  ),
+      createComment(i++)),
 });
 
-export const createGallery = () =>
+
+const createGallery = () =>
   Array.from({ length: MAX_PICTURE }, (_, i) =>
-    createPicture(i++)
-  );
+    createPicture(i));
 
-const gallery = document.querySelector('.pictures');
-const thumbnailTemplate = document.querySelector('#picture').content.querySelector('.picture');
+const pictureList = createGallery(25);
 
-const createPictureElement = ({ url, description, likes, comments }) => {
-  const thumbnail = thumbnailTemplate.cloneNode(true);
-  const thumbnailsImage = thumbnail.querySelector('.picture__img');
+const createPictureElement = ({ url, description, likes, comments, id }) => {
+  const thumbnail = pictureTemplate.cloneNode(true);
 
-  thumbnailsImage.src = url;
-  thumbnailsImage.alt = description;
+  thumbnail.querySelector('.picture__img').src = url;
+  thumbnail.querySelector('.picture__img').alt = description;
   thumbnail.querySelector('.picture__likes').textContent = likes;
   thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.dataset.id = id;
 
   return thumbnail;
 };
 
-export const renderGallery = (arrayPhotos) => {
-  const thumbnailsFragment = document.createDocumentFragment();
+export const renderGallery = (pictures) => {
+  const fragment = document.createDocumentFragment();
 
-  arrayPhotos.forEach((photoData) => {
-    const thumbnail = createPictureElement(photoData);
+  pictures.forEach((picture) => {
+    const pictureElement = createPictureElement(picture);
 
-    thumbnailsFragment.append(thumbnail);
+    fragment.append(pictureElement);
   });
 
-  gallery.append(thumbnailsFragment);
+  gallery.append(fragment);
 };
 
-const arrayPictures = createGallery();
-renderGallery(arrayPictures);
+
+gallery.addEventListener('click', (evt) => {
+  const thumbnail = evt.target.closest('[data-id]');
+
+  if (!thumbnail) {
+    return;
+  }
+
+  const pictureData = pictureList.find(
+    (item) => item.id === +thumbnail.dataset.id
+  );
+
+  if (!pictureData) {
+    return;
+  }
+
+  openBigPicture(pictureData);
+});
+
+
+renderGallery(pictureList);
+
