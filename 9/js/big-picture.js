@@ -1,8 +1,6 @@
-
-// import { MAX_COMMENTS } from './data.js';
 import { isEscapeKey } from './utils.js';
 
-const MIN_COMMENTS = 5;
+const STEP_COMMENTS = 5;
 const DEFAULT_COMMENT_COUNT = 0;
 
 const bigPicture = document.querySelector('.big-picture');
@@ -28,34 +26,30 @@ const createComment = ({ avatar, name, message }) => {
 };
 
 const renderComments = () => {
-  visibleComments += MIN_COMMENTS;
+  visibleComments = Math.min(visibleComments + STEP_COMMENTS, activePictureComments.length);
 
   if (visibleComments >= activePictureComments.length) {
-    visibleComments = activePictureComments.length;
     commentsLoader.classList.add('hidden');
   } else {
     commentsLoader.classList.remove('hidden');
   }
 
-  const commentsToRender = activePictureComments.slice(visibleComments, visibleComments + MIN_COMMENTS);
   const fragment = document.createDocumentFragment();
 
-  commentsToRender.forEach((comment) => {
-    fragment.append(createComment(comment));
-  });
+  for (let i = visibleComments - STEP_COMMENTS; i < visibleComments; i++) {
+    if (activePictureComments[i]) {
+      fragment.append(createComment(activePictureComments[i]));
+    }
+  }
 
-  commentsContainer.innerHTML = '';
-  commentsContainer.replaceChildren(fragment);
+  commentsContainer.append(fragment);
   showCommentsCount.textContent = visibleComments;
-  // commentsCount.textContent = MAX_COMMENTS;
 };
 
 const resetComments = () => {
-  visibleComments = DEFAULT_COMMENT_COUNT ;
+  visibleComments = DEFAULT_COMMENT_COUNT;
   activePictureComments = [];
   commentsContainer.innerHTML = '';
-  commentsToShowCount.textContent = DEFAULT_COMMENT_COUNT ;
-  showCommentsCount.textContent = DEFAULT_COMMENT_COUNT ;
 };
 
 const onCommentsLoaderClick = () => renderComments();
