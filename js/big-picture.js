@@ -1,6 +1,6 @@
 import { isEscapeKey } from './utils.js';
 
-const MIN_COMMENTS = 5;
+const STEP_COMMENTS = 5;
 const DEFAULT_COMMENT_COUNT = 0;
 
 const bigPicture = document.querySelector('.big-picture');
@@ -26,10 +26,9 @@ const createComment = ({ avatar, name, message }) => {
 };
 
 const renderComments = () => {
-  visibleComments += MIN_COMMENTS;
+  visibleComments = Math.min(visibleComments + STEP_COMMENTS, activePictureComments.length);
 
   if (visibleComments >= activePictureComments.length) {
-    visibleComments = activePictureComments.length;
     commentsLoader.classList.add('hidden');
   } else {
     commentsLoader.classList.remove('hidden');
@@ -37,7 +36,7 @@ const renderComments = () => {
 
   const fragment = document.createDocumentFragment();
 
-  for (let i = visibleComments - MIN_COMMENTS; i < visibleComments; i++) {
+  for (let i = visibleComments - STEP_COMMENTS; i < visibleComments; i++) {
     if (activePictureComments[i]) {
       fragment.append(createComment(activePictureComments[i]));
     }
