@@ -47,8 +47,10 @@ const renderComments = () => {
 
 const resetComments = () => {
   visibleComments = DEFAULT_COMMENT_COUNT;
-  activePictureComments = DEFAULT_COMMENT_COUNT;
+  activePictureComments = [];
   commentsContainer.innerHTML = '';
+  showCommentsCount.textContent = DEFAULT_COMMENT_COUNT;
+  commentsCount.textContent = DEFAULT_COMMENT_COUNT;
 };
 
 const onCommentsLoaderClick = () => renderComments();
