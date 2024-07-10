@@ -1,5 +1,5 @@
-const MAX_COUNT_HASHTAG = 5;
-const MAX_LENGTH_COMMENT = 140;
+const HASHTAG_MAX_COUNT = 5;
+const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_ERROR_MESSAGE = 'Неверный формат хэштэгов';
 const COMMENT_ERROR_MESSAGE = 'Длина комментария не может составлять больше 140 символов';
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
@@ -40,9 +40,9 @@ const normalizeTags = (tagString) => tagString
   .split(' ')
   .filter((tag) => Boolean(tag.length));
 
-const isCommentValid = (value) => value.length <= MAX_LENGTH_COMMENT;
+const isCommentValid = (value) => value.length <= COMMENT_MAX_LENGTH;
 
-const isTagsCountValid = (tags) => tags.length <= MAX_COUNT_HASHTAG;
+const isTagsCountValid = (tags) => tags.length <= HASHTAG_MAX_COUNT;
 
 const isTagsUnique = (tags) => {
   const lowerCaseTags = tags.map((tag) => tag.toLowerCase());
