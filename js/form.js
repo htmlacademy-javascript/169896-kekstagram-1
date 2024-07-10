@@ -1,7 +1,7 @@
 const MAX_COUNT_HASHTAG = 5;
 const MAX_LENGTH_COMMENT = 140;
-const VALID_HASHTAG = 'Неверный формат хэштэгов';
-const VALID_LENGTH_COMMENT = 'длина комментария не может составлять больше 140 символов';
+const HASHTAG_ERROR_MESSAGE = 'Неверный формат хэштэгов';
+const COMMENT_ERROR_MESSAGE = 'Длина комментария не может составлять больше 140 символов';
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
 
 const form = document.querySelector('.img-upload__form');
@@ -80,8 +80,8 @@ const onFormSubmit = (evt) => {
     form.submit();
   }
 };
-pristine.addValidator(hashtagField, validateHashTags, VALID_HASHTAG);
-pristine.addValidator(commentField, isCommentValid, VALID_LENGTH_COMMENT);
+pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
+pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
