@@ -1,7 +1,7 @@
 const HASHTAG_MAX_COUNT = 5;
 const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_ERROR_MESSAGE = 'Неверный формат хэштэгов';
-const COMMENT_ERROR_MESSAGE = 'Длина комментария не может составлять больше 140 символов';
+const COMMENT_ERROR_MESSAGE = `Длина комментария не может составлять больше ${COMMENT_MAX_LENGTH} символов`;
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
 
 const form = document.querySelector('.img-upload__form');
@@ -80,6 +80,7 @@ const onFormSubmit = (evt) => {
     form.submit();
   }
 };
+
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
 pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
