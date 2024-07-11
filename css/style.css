@@ -274,7 +274,9 @@ main {
 
 .img-upload__field-wrapper__error {
   color: rgb(255, 0, 0);
+  background-color: #f48181;
   font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .img-upload {

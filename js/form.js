@@ -1,3 +1,5 @@
+import { resetScale } from "./scale.js";
+
 const HASHTAG_MAX_COUNT = 5;
 const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_ERROR_MESSAGE = 'Неверный формат хэштэгов';
@@ -25,6 +27,7 @@ const showForm = () => {
 
 const hideForm = () => {
   form.reset();
+  resetScale();
   pristine.reset();
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
