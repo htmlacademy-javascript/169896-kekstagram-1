@@ -61,7 +61,6 @@ const effectsList = document.querySelector('.effects');
 const isDefault = () => selectedEffect === DEFAULT_EFFECT;
 
 const toggleSliderVisibility = (isVisible) => {
-
   if (isVisible) {
     imageUploadEffectLevel.classList.remove('hidden');
   } else {
@@ -82,9 +81,7 @@ const setSliderValue = () => {
 
 const onSliderUpdate = () => {
   const sliderValue = effectLevelSlider.noUiSlider.get();
-  imageUploadPreview.style.filter = isDefault()
-    ? ''
-    : `${selectedEffect.filter}(${sliderValue}${selectedEffect.units}`;
+
   effectLevelValue.value = sliderValue;
 };
 
@@ -109,7 +106,6 @@ noUiSlider.create(effectLevelSlider, {
 toggleSliderVisibility(false);
 
 const onEffectsChange = (evt) => {
-
   if (!evt.target.classList.contains('effects__radio')) {
     return;
   }

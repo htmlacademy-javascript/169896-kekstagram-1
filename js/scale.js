@@ -13,19 +13,17 @@ const scaleImage = (value) => {
   scaleControlValue.value = `${value}%`;
 };
 
-const getCurrentScaleLevel = () => {
-  return parseInt(scaleControlValue.value, 10);
-};
+const getCurrentScaleLevel = () => parseInt(scaleControlValue.value, 10);
 
-const onSmallerButtonClick = () => {
+function onSmallerButtonClick() {
   const currentValue = getCurrentScaleLevel();
-  let newValue = Math.max(MIN_SCALE, currentValue - SCALE_STEP);
+  const newValue = Math.max(MIN_SCALE, currentValue - SCALE_STEP);
   scaleImage(newValue);
-};
+}
 
 const onBiggerButtonClick = () => {
   const currentValue = getCurrentScaleLevel();
-  let newValue = Math.min(MAX_SCALE, currentValue + SCALE_STEP);
+  const newValue = Math.min(MAX_SCALE, currentValue + SCALE_STEP);
   scaleImage(newValue);
 };
 

@@ -1,5 +1,5 @@
-import { resetEffects } from "./effects.js";
-import { resetScale } from "./scale.js";
+import { resetEffects } from './effects.js';
+import { resetScale } from './scale.js';
 
 const HASHTAG_MAX_COUNT = 5;
 const COMMENT_MAX_LENGTH = 140;
