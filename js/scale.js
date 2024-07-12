@@ -3,37 +3,33 @@ const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const DEFAULT_SCALE = 100;
 
-const smallerButtonElement = document.querySelector('.scale__control--smaller');
-const biggerButtonElement = document.querySelector('.scale__control--bigger');
-const scaleInputElement = document.querySelector('.scale__control--value');
-const imageElement = document.querySelector('.img-upload__preview img');
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
+const imageUploadPreview = document.querySelector('.img-upload__preview img');
 
 const scaleImage = (value) => {
-  imageElement.style.transform = `scale(${value / 100})`;
-  scaleInputElement.value = `${value}%`;
+  imageUploadPreview.style.transform = `scale(${value / 100})`;
+  scaleControlValue.value = `${value}%`;
+};
+
+const getCurrentScaleLevel = () => {
+  return parseInt(scaleControlValue.value, 10);
 };
 
 const onSmallerButtonClick = () => {
-  const currentValue = parseInt(scaleInputElement.value, 10);
-  let newValue = currentValue - SCALE_STEP;
-  if (newValue < MIN_SCALE) {
-    newValue = MIN_SCALE;
-  }
+  const currentValue = getCurrentScaleLevel();
+  let newValue = Math.max(MIN_SCALE, currentValue - SCALE_STEP);
   scaleImage(newValue);
 };
 
 const onBiggerButtonClick = () => {
-  const currentValue = parseInt(scaleInputElement.value, 10);
-  let newValue = currentValue + SCALE_STEP;
-  if (newValue > MAX_SCALE) {
-    newValue = MAX_SCALE;
-  }
+  const currentValue = getCurrentScaleLevel();
+  let newValue = Math.min(MAX_SCALE, currentValue + SCALE_STEP);
   scaleImage(newValue);
 };
 
-const resetScale = () => scaleImage(DEFAULT_SCALE);
+export const resetScale = () => scaleImage(DEFAULT_SCALE);
 
-smallerButtonElement.addEventListener('click', onSmallerButtonClick);
-biggerButtonElement.addEventListener('click', onBiggerButtonClick);
-
-export { resetScale };
+scaleControlSmaller.addEventListener('click', onSmallerButtonClick);
+scaleControlBigger.addEventListener('click', onBiggerButtonClick);

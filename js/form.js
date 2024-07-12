@@ -1,3 +1,4 @@
+import { resetEffects } from "./effects.js";
 import { resetScale } from "./scale.js";
 
 const HASHTAG_MAX_COUNT = 5;
@@ -28,6 +29,7 @@ const showForm = () => {
 const hideForm = () => {
   form.reset();
   resetScale();
+  resetEffects();
   pristine.reset();
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
