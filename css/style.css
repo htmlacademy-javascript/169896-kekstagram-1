@@ -272,6 +272,13 @@ main {
 /* Поле для загрузки нового изображения
    ========================================================================== */
 
+.img-upload__field-wrapper__error {
+  color: rgb(255, 0, 0);
+  background-color: #f48181;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 .img-upload {
   -ms-grid-column: 3;
   -ms-grid-column-span: 3;
@@ -1407,4 +1414,8 @@ main {
 
 .hidden {
   display: none;
+}
+
+.red-with-shadow {
+  color: red;
 }
