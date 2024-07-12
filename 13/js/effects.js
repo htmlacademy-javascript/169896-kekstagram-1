@@ -81,7 +81,7 @@ const setSliderValue = () => {
 
 const onSliderUpdate = () => {
   const sliderValue = effectLevelSlider.noUiSlider.get();
-
+  imageUploadPreview.style.filter = `${selectedEffect.filter}(${sliderValue}${selectedEffect.units}`;
   effectLevelValue.value = sliderValue;
 };
 
@@ -98,7 +98,7 @@ noUiSlider.create(effectLevelSlider, {
     min: DEFAULT_EFFECT.min,
     max: DEFAULT_EFFECT.max,
   },
-  start: DEFAULT_EFFECT.start,
+  start: DEFAULT_EFFECT.max,
   step: DEFAULT_EFFECT.step,
   connect: 'lower',
 });
