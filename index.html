@@ -211,22 +211,28 @@
   </template>
 
   <!-- Сообщение с ошибкой загрузки изображения -->
-  <template id="error">
-    <section class="error">
-      <div class="error__inner">
-        <h2 class="error__title">Ошибка загрузки файла</h2>
-        <button type="button" class="error__button">Попробовать ещё раз</button>
+  <template id="error-response">
+    <section class="response">
+      <div class="response-error__inner">
+        <h2 class="response-error__title">Ошибка загрузки файла</h2>
+          <button type="button" class="dialog__cta—close error-button">Попробовать ещё раз</button>
       </div>
     </section>
   </template>
 
   <!-- Сообщение об успешной загрузке изображения -->
-  <template id="success">
-    <section class="success">
-      <div class="success__inner">
-        <h2 class="success__title">Изображение успешно загружено</h2>
-        <button type="button" class="success__button">Круто!</button>
+  <template id="success-response">
+    <section class="response">
+      <div class="response-success__inner">
+        <h2 class="response-success__title">Изображение успешно загружено</h2>
+          <button type="button" class="dialog__cta—close success-button">Круто!</button>
       </div>
+    </section>
+  </template>
+
+  <template id="data-error">
+    <section class="data-error">
+      <h2 class="data-error__title">Не удалось загрузить данные</h2>
     </section>
   </template>
 
