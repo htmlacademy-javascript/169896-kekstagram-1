@@ -7,22 +7,20 @@ const errorDialogTemplate = document.querySelector('#error').content.querySelect
 const successDialogTemplate = document.querySelector('#success').content.querySelector('.response');
 
 const onDocumentKeydown = (evt) => {
-  document.addEventListener('keydown', onDocumentKeydown, true);
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     evt.stopPropagation();
-    onHideDialog();
+    hideDialog();
   }
 };
 
-function onHideDialog () {
+function hideDialog () {
   const activeDialog = document.querySelector('.response');
 
   if (!activeDialog) {
     return;
   }
 
-  activeDialog.querySelector('.dialog__cta—close');
   activeDialog.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
@@ -31,16 +29,16 @@ function onHideDialog () {
 function onDocumentClick(evt) {
   const responseDialog = document.querySelector('.response');
 
-  if (!responseDialog.contains(evt.target) && !evt.target.classList.contains('dialog__cta--close')) {
-    onHideDialog();
+  if (!responseDialog.contains(evt.target)) {
+    hideDialog();
   }
 }
 
 const showDialog = (template) => {
   document.body.append(template);
-  document.addEventListener('click', onDocumentClick);
-  document.addEventListener('keydown', onDocumentKeydown);
-  template.querySelector('.dialog__cta—close').addEventListener('click', onHideDialog);
+  document.addEventListener('click', onDocumentClick, true);
+  document.addEventListener('keydown', onDocumentKeydown, true);
+  template.querySelector('.dialog__cta—close').addEventListener('click', () => hideDialog());
 };
 
 export const showErrorDialog = () => {
