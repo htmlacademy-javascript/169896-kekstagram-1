@@ -3,43 +3,44 @@ import { isEscapeKey } from './utils.js';
 const DATA_ERROR_SHOW_TIME = 5000;
 
 const dataErrorTemplate = document.querySelector('#data-error').content.querySelector('.data-error');
-const errorDialogTemplate = document.querySelector('#error-response').content.querySelector('.response');
-const successDialogTemplate = document.querySelector('#success-response').content.querySelector('.response');
+const errorDialogTemplate = document.querySelector('#error').content.querySelector('.response');
+const successDialogTemplate = document.querySelector('#success').content.querySelector('.response');
 
 const onDocumentKeydown = (evt) => {
+  document.addEventListener('keydown', onDocumentKeydown, true);
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     evt.stopPropagation();
-    hideDialog();
+    onHideDialog();
   }
 };
 
-function hideDialog () {
+function onHideDialog () {
   const activeDialog = document.querySelector('.response');
 
   if (!activeDialog) {
     return;
   }
 
-  activeDialog.querySelector('.dialog__cta—close').removeEventListener('click', hideDialog);
+  activeDialog.querySelector('.dialog__cta—close');
   activeDialog.remove();
   document.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
 }
 
 function onDocumentClick(evt) {
-  if (evt.target.closest('.response')) {
-    return;
-  }
+  const responseDialog = document.querySelector('.response');
 
-  hideDialog();
+  if (!responseDialog.contains(evt.target) && !evt.target.classList.contains('dialog__cta--close')) {
+    onHideDialog();
+  }
 }
 
 const showDialog = (template) => {
   document.body.append(template);
   document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onDocumentKeydown);
-  template.querySelector('.dialog__cta—close').addEventListener('click', hideDialog);
+  template.querySelector('.dialog__cta—close').addEventListener('click', onHideDialog);
 };
 
 export const showErrorDialog = () => {

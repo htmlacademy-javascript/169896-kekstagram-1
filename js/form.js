@@ -1,4 +1,4 @@
-import { showErrorDialog, showSuccessDialog } from './message.js';
+import { showErrorDialog, showSuccessDialog } from './dialog.js';
 import { resetEffects } from './effects.js';
 import { resetScale } from './scale.js';
 import { sendDate } from './api.js';
