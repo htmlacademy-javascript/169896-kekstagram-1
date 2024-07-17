@@ -28,8 +28,12 @@ function hideDialog () {
 
 function onDocumentClick(evt) {
   const successDialog = document.querySelector('.success__inner');
+  const errorDialog = document.querySelector('.error__inner');
 
   if (!successDialog.contains(evt.target)) {
+    hideDialog();
+  }
+  if (!errorDialog.contains(evt.target)) {
     hideDialog();
   }
 }

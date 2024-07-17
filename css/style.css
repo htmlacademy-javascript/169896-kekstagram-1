@@ -1203,9 +1203,6 @@ main {
  * Экраны ошибки и успеха загрузки изображения
  */
 
-.data-response {
-}
-
 .error,
 .success {
   position: fixed;
