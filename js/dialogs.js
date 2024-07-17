@@ -27,17 +27,9 @@ function hideDialog () {
 }
 
 function onDocumentClick(evt) {
-  const successDialog = document.querySelector('.success__inner');
-  const errorDialog = document.querySelector('.error__inner');
-  const responseDialog = document.querySelector('.response__inner');
+  const innerContent = document.querySelector('.response__inner');
 
-  if (!successDialog.contains(evt.target)) {
-    hideDialog();
-  }
-  if (!errorDialog.contains(evt.target)) {
-    hideDialog();
-  }
-  if (!responseDialog.contains(evt.target)) {
+  if (!innerContent.contains(evt.target)) {
     hideDialog();
   }
 }
