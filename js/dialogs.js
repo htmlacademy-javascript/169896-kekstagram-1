@@ -22,21 +22,21 @@ function hideDialog () {
   }
 
   activeDialog.remove();
-  document.removeEventListener('keydown', onDocumentKeydown);
   document.removeEventListener('click', onDocumentClick);
+  document.removeEventListener('keydown', onDocumentKeydown, true);
 }
 
 function onDocumentClick(evt) {
-  const responseDialog = document.querySelector('.response');
+  const successDialog = document.querySelector('.success__inner');
 
-  if (!responseDialog.contains(evt.target)) {
+  if (!successDialog.contains(evt.target)) {
     hideDialog();
   }
 }
 
 const showDialog = (template) => {
   document.body.append(template);
-  document.addEventListener('click', onDocumentClick, true);
+  document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onDocumentKeydown, true);
   template.querySelector('.dialog__cta—close').addEventListener('click', () => hideDialog());
 };

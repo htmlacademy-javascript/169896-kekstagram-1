@@ -84,5 +84,3 @@ gallery.addEventListener('click', (evt) => {
 });
 
 
-renderGallery(pictureList);
-
