@@ -210,25 +210,33 @@
     </a>
   </template>
 
-  <!-- Сообщение с ошибкой загрузки изображения -->
-  <template id="error">
-    <section class="error">
-      <div class="error__inner">
-        <h2 class="error__title">Ошибка загрузки файла</h2>
-        <button type="button" class="error__button">Попробовать ещё раз</button>
-      </div>
-    </section>
-  </template>
+<!-- Сообщение с ошибкой загрузки изображения -->
+<template id="error">
+  <section class="error response">
+    <div class="error__inner response__inner">
+      <h2 class="error__title">Ошибка загрузки файла</h2>
+      <button type="button" class="dialog__cta—close error__button">Попробовать ещё раз</button>
+    </div>
+  </section>
+</template>
 
-  <!-- Сообщение об успешной загрузке изображения -->
-  <template id="success">
-    <section class="success">
-      <div class="success__inner">
-        <h2 class="success__title">Изображение успешно загружено</h2>
-        <button type="button" class="success__button">Круто!</button>
-      </div>
-    </section>
-  </template>
+<template id="data-error">
+  <section class="data-error">
+    <div class="response__inner">
+      <h2 class="data-error__title">Не удалось загрузить данные</h2>
+    </div>
+  </section>
+</template>
+
+<!-- Сообщение об успешной загрузке изображения -->
+<template id="success">
+  <section class="success response">
+    <div class="success__inner response__inner">
+      <h2 class="success__title">Изображение успешно загружено</h2>
+      <button type="button" class="dialog__cta—close success__button">Круто!</button>
+    </div>
+  </section>
+</template>
 
   <!-- Экран загрузки изображения -->
   <template id="messages">

@@ -1,5 +1,7 @@
+import { showErrorDialog, showSuccessDialog } from './dialogs.js';
 import { resetEffects } from './effects.js';
 import { resetScale } from './scale.js';
+import { sendDate } from './api.js';
 
 const HASHTAG_MAX_COUNT = 5;
 const COMMENT_MAX_LENGTH = 140;
@@ -13,6 +15,12 @@ const cancelButton = document.querySelector('.img-upload__cancel');
 const fileField = document.querySelector('.img-upload__input');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
+const submitButton = form.querySelector('.img-upload__submit');
+
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
+};
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -26,7 +34,7 @@ const showForm = () => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const hideForm = () => {
+export const hideForm = () => {
   form.reset();
   resetScale();
   resetEffects();
@@ -78,17 +86,38 @@ const onFileInputChange = () => {
   showForm();
 };
 
-const onFormSubmit = (evt) => {
+
+const toggleSubmitButton = (disabled) => {
+  submitButton.disabled = disabled;
+  submitButton.textContent = disabled ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;
+};
+
+form.addEventListener('submit', (evt) => {
   evt.preventDefault();
 
-  if (pristine.validate()) {
-    form.submit();
+  const isValid = pristine.validate();
+
+  if (isValid) {
+    toggleSubmitButton(true);
+    sendDate(new FormData(evt.target))
+      .then(
+        () => {
+          hideForm();
+          showSuccessDialog();
+        }
+      )
+      .catch(
+        (err) => {
+          showErrorDialog(err.message);
+        }
+      )
+      .finally(() => toggleSubmitButton(false));
   }
-};
+});
 
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
 pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
-form.addEventListener('submit', onFormSubmit);
+
