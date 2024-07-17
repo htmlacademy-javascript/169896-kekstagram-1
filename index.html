@@ -213,7 +213,7 @@
 <!-- Сообщение с ошибкой загрузки изображения -->
 <template id="error">
   <section class="error response">
-    <div class="error__inner">
+    <div class="error__inner response__inner">
       <h2 class="error__title">Ошибка загрузки файла</h2>
       <button type="button" class="dialog__cta—close error__button">Попробовать ещё раз</button>
     </div>
@@ -222,14 +222,16 @@
 
 <template id="data-error">
   <section class="data-error">
-    <h2 class="data-error__title">Не удалось загрузить данные</h2>
+    <div class="response__inner">
+      <h2 class="data-error__title">Не удалось загрузить данные</h2>
+    </div>
   </section>
 </template>
 
 <!-- Сообщение об успешной загрузке изображения -->
 <template id="success">
   <section class="success response">
-    <div class="success__inner">
+    <div class="success__inner response__inner">
       <h2 class="success__title">Изображение успешно загружено</h2>
       <button type="button" class="dialog__cta—close success__button">Круто!</button>
     </div>
