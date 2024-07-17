@@ -38,7 +38,7 @@ const showDialog = (template) => {
   document.body.append(template);
   document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onDocumentKeydown, true);
-  template.querySelector('.dialog__cta—close').addEventListener('click', () => hideDialog());
+  template.querySelector('.dialog__close').addEventListener('click', () => hideDialog());
 };
 
 export const showErrorDialog = () => {
