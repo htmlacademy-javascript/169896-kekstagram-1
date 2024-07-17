@@ -1,7 +1,7 @@
 import { showErrorDialog, showSuccessDialog } from './dialogs.js';
 import { resetEffects } from './effects.js';
 import { resetScale } from './scale.js';
-import { sendDate } from './api.js';
+import { sendData } from './api.js';
 
 const HASHTAG_MAX_COUNT = 5;
 const COMMENT_MAX_LENGTH = 140;
@@ -99,7 +99,7 @@ form.addEventListener('submit', (evt) => {
 
   if (isValid) {
     toggleSubmitButton(true);
-    sendDate(new FormData(evt.target))
+    sendData(new FormData(evt.target))
       .then(
         () => {
           hideForm();

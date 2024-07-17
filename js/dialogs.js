@@ -9,7 +9,6 @@ const successDialogTemplate = document.querySelector('#success').content.querySe
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    evt.stopPropagation();
     hideDialog();
   }
 };
