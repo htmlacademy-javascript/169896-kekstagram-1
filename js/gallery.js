@@ -1,88 +1,79 @@
-import { createUniqueRandomIdGenerator, debounce } from './utils.js';
+import { debounce } from './utils.js';
 import { openBigPicture } from './big-picture.js';
 
+const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
 const filterButtons = document.querySelectorAll('.img-filters__button');
 let photos = [];
 
+const createPictureElement = ({ url, description, likes, comments, id }) => {
+  const thumbnail = pictureTemplate.cloneNode(true);
 
-// const createComment = (id) => ({
-//   id,
-//   avatar: `img/avatar-${getRandomInteger(1, MAX_AVATAR)}.svg`,
-//   message: getRandomArrayElement(MESSAGES),
-//   name: getRandomArrayElement(NAMES),
-// });
-
-// const createPicture = (id) => ({
-//   id,
-//   url: `photos/${id}.jpg`,
-//   description: getRandomArrayElement(DESCRIPTIONS),
-//   likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-//   comments: Array.from(
-//     { length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS) },
-//     (_, i) =>
-//       createComment(i++)),
-// });
-
-
-const getThumbnailClick = () => (evt) => {
-  if (evt.target.matches('img')) {
-    evt.preventDefault();
-    const photoId = evt.target.parentNode.dataset.photoId;
-    openBigPicture(photos.find((photo) => photo.id === parseInt(photoId, 10)));
-  }
-};
-
-// const createGallery = () =>
-//   Array.from({ length: MAX_PICTURE }, (_, i) =>
-//     createPicture(i));
-
-// const pictureList = createGallery(25);
-
-const createPictureElement = (template, photo) => {
-  const thumbnail = template.querySelector('.picture').cloneNode(true);
-
-  thumbnail.querySelector('.picture__img').src = photo.url;
-  thumbnail.querySelector('.picture__likes').textContent = photo.likes;
-  thumbnail.querySelector('.picture__comments').textContent = photo.comments.length;
-  thumbnail.dataset.photoId = photo.id;
+  thumbnail.querySelector('.picture__img').src = url;
+  thumbnail.querySelector('.picture__img').alt = description;
+  thumbnail.querySelector('.picture__likes').textContent = likes;
+  thumbnail.querySelector('.picture__comments').textContent = comments.length;
+  thumbnail.dataset.id = id;
 
   return thumbnail;
 };
-////////////////////
-const createThumbnails = (photoList) => {
+
+export const renderGallery = (pictures) => {
   const fragment = document.createDocumentFragment();
-  const templateContent = document.querySelector('#picture').content;
-  for (const photo of photoList) {
-    const thumbnail = createPictureElement(templateContent, photo);
-    fragment.append(thumbnail);
-  }
+
+  pictures.forEach((picture) => {
+    const pictureElement = createPictureElement(picture);
+
+    fragment.append(pictureElement);
+  });
 
   gallery.append(fragment);
 };
 
+const handleGalleryClick = (evt) => {
+  const thumbnail = evt.target.closest('[data-id]');
+
+  if (!thumbnail) {
+    return;
+  }
+
+  const pictureData = photos.find(
+    (item) => item.id === +thumbnail.dataset.id
+  );
+
+  if (!pictureData) {
+    return;
+  }
+
+  openBigPicture(pictureData);
+};
+
+gallery.addEventListener('click', handleGalleryClick);
+
+export const initGallery = (data) => {
+  photos = data;
+
+  renderGallery(photos);
+};
+
+///////// почему не рабоает эта часть кода? вроде всё верно
 const removeThumbnails = () => {
   document.querySelectorAll('.picture').forEach((el) => el.remove());
 };
 
 const showDefaultPhotos = () => {
   removeThumbnails();
-  createThumbnails(photos);
+  createPictureElement(photos);
 };
 
 const showDiscussedPhotos = () => {
   removeThumbnails();
-  createThumbnails(photos.slice().sort((a, b) => b.comments.length - a.comments.length));
+  createPictureElement(photos.slice().sort((a, b) => b.comments.length - a.comments.length));
 };
 
 const showRandomPhotos = () => {
-  const getRandomPhotoId = createUniqueRandomIdGenerator(0, photos.length - 1);
-  const currentPhotos = [];
-  for (let i = 0; i < 10; i++) {
-    currentPhotos.push(photos[getRandomPhotoId()]);
-  }
   removeThumbnails();
-  createThumbnails(currentPhotos);
+  createPictureElement(photos.Math.floor(Math.random() * 10) + 1);
 };
 
 const activeFilter = (target) => {
@@ -90,14 +81,13 @@ const activeFilter = (target) => {
   target.classList.add('img-filters__button--active');
 };
 
-export const initThumbnails = (photoList) => {
+export const init = (photoList) => {
   photos = photoList;
-  const onThumbnailClick = getThumbnailClick();
-  gallery.addEventListener('click', onThumbnailClick);
+  gallery.addEventListener('click', handleGalleryClick);
 
   document.querySelector('.img-filters').classList.remove('img-filters--inactive');
-  filterButtons.forEach((button) => {
-    button.addEventListener('click', (evt) => activeFilter(evt.target));
+  filterButtons.forEach((btn) => {
+    btn.addEventListener('click', (evt) => activeFilter(evt.target));
   });
   document.querySelector('#filter-default').addEventListener('click', debounce(showDefaultPhotos));
   document.querySelector('#filter-random').addEventListener('click', debounce(showRandomPhotos));

@@ -120,4 +120,3 @@ pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
 fileField.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
-
