@@ -19,7 +19,7 @@ const createPictureElement = ({ url, description, likes, comments, id }) => {
   return thumbnail;
 };
 
-export const renderGallery = (pictures) => {
+const renderGallery = (pictures) => {
   const fragment = document.createDocumentFragment();
 
   pictures.forEach((picture) => {
@@ -61,10 +61,8 @@ const sortByDiscussed = () => {
 
 const sortByRandom = () => {
   removeThumbnails();
-  const randomPhotos = photos.sort(() => Math.random() - 0.5).slice(0, 10);
-  renderGallery(randomPhotos);
+  renderGallery(photos.toSorted(() => Math.random() - 0.5).slice(0, 10));
 };
-
 
 export const initGallery = (data) => {
   photos = data;
