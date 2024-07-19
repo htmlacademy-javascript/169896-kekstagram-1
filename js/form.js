@@ -9,6 +9,7 @@ const HASHTAG_ERROR_MESSAGE = 'Неверный формат хэштэгов';
 const COMMENT_ERROR_MESSAGE = `Длина комментария не может составлять больше ${COMMENT_MAX_LENGTH} символов`;
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
 
+// const uploadImageInput = document.querySelector('#upload-file');
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
@@ -114,6 +115,23 @@ form.addEventListener('submit', (evt) => {
       .finally(() => toggleSubmitButton(false));
   }
 });
+
+// const imageSelect = () => {
+//   overlay.classList.remove('hidden');
+//   document.body.classList.add('modal-open');
+
+//   const reader = new FileReader();
+//   reader.onload = function(event) {
+//     imageUploadPreview.src = event.target.result;
+//   };
+//   reader.readAsDataURL(uploadImageInput.files[0]);
+
+//   resetScale();
+//   resetEffects();
+//   const uploadCancelBotton = document.querySelector('#upload-cancel');
+//   uploadCancelBotton.addEventListener('click', onImageLoadCloseClick);
+//   document.addEventListener('keydown', onImageLoadEscKeyDown);
+// };
 
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
 pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);

@@ -4,6 +4,7 @@ import { openBigPicture } from './big-picture.js';
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
 const filterButtons = document.querySelectorAll('.img-filters__button');
+const imgFilters = document.querySelector('.img-filters');
 let photos = [];
 
 const createPictureElement = ({ url, description, likes, comments, id }) => {
@@ -30,68 +31,72 @@ export const renderGallery = (pictures) => {
   gallery.append(fragment);
 };
 
-const handleGalleryClick = (evt) => {
+const onHandleGalleryClick = (evt) => {
   const thumbnail = evt.target.closest('[data-id]');
 
   if (!thumbnail) {
     return;
   }
 
-  const pictureData = photos.find(
+  const photoData = photos.find(
     (item) => item.id === +thumbnail.dataset.id
   );
 
-  if (!pictureData) {
+  if (!photoData) {
     return;
   }
 
-  openBigPicture(pictureData);
+  openBigPicture(photoData);
 };
 
-gallery.addEventListener('click', handleGalleryClick);
-
-export const initGallery = (data) => {
-  photos = data;
-
-  renderGallery(photos);
-};
-
-///////// почему не рабоает эта часть кода? вроде всё верно
+///////// почему  НЕ ВЕРНО  рабоает эта часть кода? вроде всё верно
 const removeThumbnails = () => {
   document.querySelectorAll('.picture').forEach((el) => el.remove());
 };
 
-const showDefaultPhotos = () => {
+const sortByDiscussed = () => {
   removeThumbnails();
-  createPictureElement(photos);
+  renderGallery(photos.toSorted((a, b) => b.comments.length - a.comments.length));
 };
 
-const showDiscussedPhotos = () => {
+const sortByRandom = () => {
   removeThumbnails();
-  createPictureElement(photos.slice().sort((a, b) => b.comments.length - a.comments.length));
+  renderGallery(photos.toSorted(Math.floor(Math.random() * 10) + 1));
 };
 
-const showRandomPhotos = () => {
-  removeThumbnails();
-  createPictureElement(photos.Math.floor(Math.random() * 10) + 1);
-};
 
-const activeFilter = (target) => {
-  filterButtons.forEach((btn) => btn.classList.remove('img-filters__button--active'));
-  target.classList.add('img-filters__button--active');
-};
+export const initGallery = (data) => {
+  photos = data;
 
-export const init = (photoList) => {
-  photos = photoList;
-  gallery.addEventListener('click', handleGalleryClick);
+  const activeFilter = (target) => {
+    const activeButton = document.querySelector('.img-filters__button--active');
+    if (activeButton) {
+      activeButton.classList.remove('img-filters__button--active');
+    }
+    target.classList.add('img-filters__button--active');
+  };
 
-  document.querySelector('.img-filters').classList.remove('img-filters--inactive');
-  filterButtons.forEach((btn) => {
-    btn.addEventListener('click', (evt) => activeFilter(evt.target));
+  imgFilters.classList.remove('img-filters--inactive');
+
+  gallery.addEventListener('click', onHandleGalleryClick);
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', (evt) => {
+      activeFilter(evt.target);
+
+      switch (evt.target.id) {
+        case 'filter-default':
+          debounce(renderGallery(photos));
+          break;
+        case 'filter-random':
+          debounce(sortByRandom(photos));
+          break;
+        case 'filter-discussed':
+          debounce(sortByDiscussed(photos));
+          break;
+        default:
+      }
+    });
   });
-  document.querySelector('#filter-default').addEventListener('click', debounce(showDefaultPhotos));
-  document.querySelector('#filter-random').addEventListener('click', debounce(showRandomPhotos));
-  document.querySelector('#filter-discussed').addEventListener('click', debounce(showDiscussedPhotos));
-
-  showDefaultPhotos();
+  renderGallery(photos);
 };
