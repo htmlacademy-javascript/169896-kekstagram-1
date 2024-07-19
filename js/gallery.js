@@ -49,7 +49,7 @@ const onHandleGalleryClick = (evt) => {
   openBigPicture(photoData);
 };
 
-///////// почему  НЕ ВЕРНО  рабоает эта часть кода? вроде всё верно
+
 const removeThumbnails = () => {
   document.querySelectorAll('.picture').forEach((el) => el.remove());
 };
@@ -61,7 +61,8 @@ const sortByDiscussed = () => {
 
 const sortByRandom = () => {
   removeThumbnails();
-  renderGallery(photos.toSorted(Math.floor(Math.random() * 10) + 1));
+  const randomPhotos = photos.sort(() => Math.random() - 0.5).slice(0, 10);
+  renderGallery(randomPhotos);
 };
 
 
