@@ -5,6 +5,11 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 const gallery = document.querySelector('.pictures');
 const filterButtons = document.querySelectorAll('.img-filters__button');
 const imgFilters = document.querySelector('.img-filters');
+const FilterTypes = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
+};
 let photos = [];
 
 const createPictureElement = ({ url, description, likes, comments, id }) => {
@@ -54,49 +59,54 @@ const removeThumbnails = () => {
   document.querySelectorAll('.picture').forEach((el) => el.remove());
 };
 
-const sortByDiscussed = () => {
-  removeThumbnails();
-  renderGallery(photos.toSorted((a, b) => b.comments.length - a.comments.length));
+const sortByDiscussed = (a, b) => b.comments.length - a.comments.length;
+
+const sortByRandom = () => Math.random() - 0.5;
+
+//// ЕСЛИ РАСКОММЕНТИРОВАТЬ ВМЕСТО ВЕРХНИХ ТО ВСЁ РАБОТАЕТ
+
+// const sortByDiscussed = () => {
+//   removeThumbnails();
+//   renderGallery(photos.toSorted((a, b) => b.comments.length - a.comments.length));
+// };
+
+// const sortByRandom = () => {
+//   removeThumbnails();
+//   renderGallery(photos.toSorted(() => Math.random() - 0.5).slice(0, 10));
+// };
+
+const activeFilter = (target) => {
+  const activeButton = document.querySelector('.img-filters__button--active');
+  if (activeButton) {
+    activeButton.classList.remove('img-filters__button--active');
+  }
+  target.classList.add('img-filters__button--active');
 };
 
-const sortByRandom = () => {
-  removeThumbnails();
-  renderGallery(photos.toSorted(() => Math.random() - 0.5).slice(0, 10));
-};
+// РАБОЧИЙ КОД
+
+debounce(filterButtons.forEach(button => {
+  button.addEventListener('click', (evt) => {
+    activeFilter(evt.target);
+
+    switch (evt.target.id) {
+      case FilterTypes.DEFAULT:
+        removeThumbnails();
+        return renderGallery(photos);
+      case FilterTypes.RANDOM:
+        return [...photos].toSorted(sortByRandom()).slice(0, 10);
+      case FilterTypes.DISCUSSED:
+        return [...photos].toSorted(sortByDiscussed());
+      default:
+        return [...photos];
+    }
+  });
+})
+);
 
 export const initGallery = (data) => {
   photos = data;
-
-  const activeFilter = (target) => {
-    const activeButton = document.querySelector('.img-filters__button--active');
-    if (activeButton) {
-      activeButton.classList.remove('img-filters__button--active');
-    }
-    target.classList.add('img-filters__button--active');
-  };
-
-  imgFilters.classList.remove('img-filters--inactive');
-
   gallery.addEventListener('click', onHandleGalleryClick);
-
-  filterButtons.forEach(button => {
-    button.addEventListener('click', (evt) => {
-      activeFilter(evt.target);
-
-      switch (evt.target.id) {
-        case 'filter-default':
-          removeThumbnails();
-          debounce(renderGallery(photos));
-          break;
-        case 'filter-random':
-          debounce(sortByRandom(photos));
-          break;
-        case 'filter-discussed':
-          debounce(sortByDiscussed(photos));
-          break;
-        default:
-      }
-    });
-  });
+  imgFilters.classList.remove('img-filters--inactive');
   renderGallery(photos);
 };
