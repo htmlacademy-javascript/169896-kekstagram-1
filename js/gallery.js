@@ -86,6 +86,7 @@ export const initGallery = (data) => {
 
       switch (evt.target.id) {
         case 'filter-default':
+          removeThumbnails();
           debounce(renderGallery(photos));
           break;
         case 'filter-random':
