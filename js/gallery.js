@@ -65,8 +65,6 @@ const removeThumbnails = () => {
 
 // const sortByRandom = () => (Math.random() - 0.5).slice(0, 10);
 
-//// ЕСЛИ РАСКОММЕНТИРОВАТЬ ВМЕСТО ВЕРХНИХ ТО ВСЁ РАБОТАЕТ, Я ВСЁ ПЕРЕБРАЛ В ЭТИХ ФИЛЬТРАХ Я ХЗ
-
 const sortByDiscussed = () => {
   removeThumbnails();
   renderGallery(photos.toSorted((a, b) => b.comments.length - a.comments.length));
