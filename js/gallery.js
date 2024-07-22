@@ -5,6 +5,8 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 const gallery = document.querySelector('.pictures');
 const filterButtons = document.querySelectorAll('.img-filters__button');
 const imgFilters = document.querySelector('.img-filters');
+const filterContainer = document.querySelector('.img-filters');
+
 const FilterTypes = {
   DEFAULT: 'filter-default',
   RANDOM: 'filter-random',
@@ -36,7 +38,7 @@ const renderGallery = (pictures) => {
   gallery.append(fragment);
 };
 
-const onHandleGalleryClick = (evt) => {
+const onOpenBigPicture = (evt) => {
   const thumbnail = evt.target.closest('[data-id]');
 
   if (!thumbnail) {
@@ -63,7 +65,7 @@ const sortByDiscussed = (a, b) => b.comments.length - a.comments.length;
 
 const sortByRandom = () => Math.random() - 0.5;
 
-//// ЕСЛИ РАСКОММЕНТИРОВАТЬ ВМЕСТО ВЕРХНИХ ТО ВСЁ РАБОТАЕТ
+//// ЕСЛИ РАСКОММЕНТИРОВАТЬ ВМЕСТО ВЕРХНИХ ТО ВСЁ РАБОТАЕТ, Я ВСЁ ПЕРЕБРАЛ В ЭТИХ ФИЛЬТРАХ Я ХЗ
 
 // const sortByDiscussed = () => {
 //   removeThumbnails();
@@ -85,28 +87,32 @@ const activeFilter = (target) => {
 
 // РАБОЧИЙ КОД
 
-debounce(filterButtons.forEach(button => {
-  button.addEventListener('click', (evt) => {
+filterContainer.addEventListener('click', (evt) => {
+  if (evt.target.classList.contains('img-filters__button')) {
     activeFilter(evt.target);
 
+    let sortedPhotos;
     switch (evt.target.id) {
-      case FilterTypes.DEFAULT:
-        removeThumbnails();
-        return renderGallery(photos);
       case FilterTypes.RANDOM:
-        return [...photos].toSorted(sortByRandom()).slice(0, 10);
+        sortedPhotos = sortByRandom(photos);
+        break;
       case FilterTypes.DISCUSSED:
-        return [...photos].toSorted(sortByDiscussed());
+        sortedPhotos = sortByDiscussed(photos);
+        break;
       default:
-        return [...photos];
+        removeThumbnails();
+        renderGallery(photos);
+        return;
     }
-  });
-})
-);
+
+    renderGallery(sortedPhotos);
+  }
+});
 
 export const initGallery = (data) => {
   photos = data;
-  gallery.addEventListener('click', onHandleGalleryClick);
+  gallery.addEventListener('click', onOpenBigPicture);
   imgFilters.classList.remove('img-filters--inactive');
   renderGallery(photos);
 };
+
