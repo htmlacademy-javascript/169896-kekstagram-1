@@ -3,6 +3,7 @@ import { openBigPicture } from './big-picture.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
+
 const imgFilters = document.querySelector('.img-filters');
 
 
@@ -66,10 +67,15 @@ const removeThumbnails = () => {
 
 //// ЕСЛИ РАСКОММЕНТИРОВАТЬ ВМЕСТО ВЕРХНИХ ТО ВСЁ РАБОТАЕТ, Я ВСЁ ПЕРЕБРАЛ В ЭТИХ ФИЛЬТРАХ Я ХЗ
 
-const sortByDiscussed = (a, b) => b.comments.length - a.comments.length;
+const sortByDiscussed = () => {
+  removeThumbnails();
+  renderGallery(photos.toSorted((a, b) => b.comments.length - a.comments.length));
+};
 
-
-const sortByRandom = () => Math.floor(Math.random() * 10) + 1;
+const sortByRandom = () => {
+  removeThumbnails();
+  renderGallery(photos.toSorted(() => Math.random() - 0.5).slice(0, 10));
+};
 
 
 const activeFilter = (target) => {
@@ -87,16 +93,13 @@ debounce(imgFilters.addEventListener('click', (evt) => {
 
     switch (evt.target.id) {
       case FilterTypes.RANDOM:
-        photos.toSorted(sortByRandom());
-        break;
+        return sortByRandom();
       case FilterTypes.DISCUSSED:
-        photos.toSorted(sortByDiscussed());
-        break;
+        return sortByDiscussed();
       default:
         removeThumbnails();
         return renderGallery(photos);
     }
-    renderGallery(photos);
   }
 }));
 
