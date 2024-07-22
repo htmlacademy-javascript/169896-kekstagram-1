@@ -3,9 +3,8 @@ import { openBigPicture } from './big-picture.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
-const filterButtons = document.querySelectorAll('.img-filters__button');
 const imgFilters = document.querySelector('.img-filters');
-const filterContainer = document.querySelector('.img-filters');
+
 
 const FilterTypes = {
   DEFAULT: 'filter-default',
@@ -61,21 +60,17 @@ const removeThumbnails = () => {
   document.querySelectorAll('.picture').forEach((el) => el.remove());
 };
 
-const sortByDiscussed = (a, b) => b.comments.length - a.comments.length;
+// const sortByDiscussed = () => ((a, b) => b.comments.length - a.comments.length);
 
-const sortByRandom = () => Math.random() - 0.5;
+// const sortByRandom = () => (Math.random() - 0.5).slice(0, 10);
 
 //// ЕСЛИ РАСКОММЕНТИРОВАТЬ ВМЕСТО ВЕРХНИХ ТО ВСЁ РАБОТАЕТ, Я ВСЁ ПЕРЕБРАЛ В ЭТИХ ФИЛЬТРАХ Я ХЗ
 
-// const sortByDiscussed = () => {
-//   removeThumbnails();
-//   renderGallery(photos.toSorted((a, b) => b.comments.length - a.comments.length));
-// };
+const sortByDiscussed = (a, b) => b.comments.length - a.comments.length;
 
-// const sortByRandom = () => {
-//   removeThumbnails();
-//   renderGallery(photos.toSorted(() => Math.random() - 0.5).slice(0, 10));
-// };
+
+const sortByRandom = () => Math.floor(Math.random() * 10) + 1;
+
 
 const activeFilter = (target) => {
   const activeButton = document.querySelector('.img-filters__button--active');
@@ -85,34 +80,31 @@ const activeFilter = (target) => {
   target.classList.add('img-filters__button--active');
 };
 
-// РАБОЧИЙ КОД
-
-filterContainer.addEventListener('click', (evt) => {
+debounce(imgFilters.addEventListener('click', (evt) => {
   if (evt.target.classList.contains('img-filters__button')) {
     activeFilter(evt.target);
 
-    let sortedPhotos;
+
     switch (evt.target.id) {
       case FilterTypes.RANDOM:
-        sortedPhotos = sortByRandom(photos);
+        photos.toSorted(sortByRandom());
         break;
       case FilterTypes.DISCUSSED:
-        sortedPhotos = sortByDiscussed(photos);
+        photos.toSorted(sortByDiscussed());
         break;
       default:
         removeThumbnails();
-        renderGallery(photos);
-        return;
+        return renderGallery(photos);
     }
-
-    renderGallery(sortedPhotos);
+    renderGallery(photos);
   }
-});
+}));
+
 
 export const initGallery = (data) => {
   photos = data;
-  gallery.addEventListener('click', onOpenBigPicture);
   imgFilters.classList.remove('img-filters--inactive');
+  gallery.addEventListener('click', onOpenBigPicture);
   renderGallery(photos);
 };
 
