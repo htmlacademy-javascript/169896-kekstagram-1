@@ -14,7 +14,7 @@
   <main>
 
     <!-- Фильтрация изображений от других пользователей -->
-    <section class="img-filters  img-filters--inactive  container">
+    <section class="img-filters img-filters--inactive container">
       <h2 class="img-filters__title  visually-hidden">Фильтр фотографий</h2>
       <form class="img-filters__form" action="index.html" method="get" autocomplete="off">
         <button type=button class="img-filters__button  img-filters__button--active" id="filter-default">По умолчанию</button>
@@ -215,16 +215,14 @@
   <section class="error response">
     <div class="error__inner response__inner">
       <h2 class="error__title">Ошибка загрузки файла</h2>
-      <button type="button" class="dialog__cta—close error__button">Попробовать ещё раз</button>
+      <button type="button" class="dialog__close error__button">Попробовать ещё раз</button>
     </div>
   </section>
 </template>
 
 <template id="data-error">
   <section class="data-error">
-    <div class="response__inner">
-      <h2 class="data-error__title">Не удалось загрузить данные</h2>
-    </div>
+    <h2 class="data-error__title">Не удалось загрузить данные</h2>
   </section>
 </template>
 
@@ -233,7 +231,7 @@
   <section class="success response">
     <div class="success__inner response__inner">
       <h2 class="success__title">Изображение успешно загружено</h2>
-      <button type="button" class="dialog__cta—close success__button">Круто!</button>
+      <button type="button" class="dialog__close success__button">Круто!</button>
     </div>
   </section>
 </template>

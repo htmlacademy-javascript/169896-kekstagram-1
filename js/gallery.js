@@ -1,44 +1,18 @@
-import {
-  MAX_PICTURE,
-  MAX_AVATAR,
-  MIN_LIKES,
-  MAX_LIKES,
-  MIN_COMMENTS,
-  MAX_COMMENTS,
-  DESCRIPTIONS,
-  NAMES,
-  MESSAGES
-} from './data.js';
-import { getRandomInteger, getRandomArrayElement } from './utils.js';
+import { debounce } from './utils.js';
 import { openBigPicture } from './big-picture.js';
 
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
 
-const createComment = (id) => ({
-  id,
-  avatar: `img/avatar-${getRandomInteger(1, MAX_AVATAR)}.svg`,
-  message: getRandomArrayElement(MESSAGES),
-  name: getRandomArrayElement(NAMES),
-});
-
-const createPicture = (id) => ({
-  id,
-  url: `photos/${id}.jpg`,
-  description: getRandomArrayElement(DESCRIPTIONS),
-  likes: getRandomInteger(MIN_LIKES, MAX_LIKES),
-  comments: Array.from(
-    { length: getRandomInteger(MIN_COMMENTS, MAX_COMMENTS) },
-    (_, i) =>
-      createComment(i++)),
-});
+const imgFilters = document.querySelector('.img-filters');
 
 
-const createGallery = () =>
-  Array.from({ length: MAX_PICTURE }, (_, i) =>
-    createPicture(i));
-
-const pictureList = createGallery(25);
+const FilterTypes = {
+  DEFAULT: 'filter-default',
+  RANDOM: 'filter-random',
+  DISCUSSED: 'filter-discussed'
+};
+let photos = [];
 
 const createPictureElement = ({ url, description, likes, comments, id }) => {
   const thumbnail = pictureTemplate.cloneNode(true);
@@ -52,7 +26,7 @@ const createPictureElement = ({ url, description, likes, comments, id }) => {
   return thumbnail;
 };
 
-export const renderGallery = (pictures) => {
+const renderGallery = (pictures) => {
   const fragment = document.createDocumentFragment();
 
   pictures.forEach((picture) => {
@@ -64,23 +38,74 @@ export const renderGallery = (pictures) => {
   gallery.append(fragment);
 };
 
-
-gallery.addEventListener('click', (evt) => {
+const onOpenBigPicture = (evt) => {
   const thumbnail = evt.target.closest('[data-id]');
 
   if (!thumbnail) {
     return;
   }
 
-  const pictureData = pictureList.find(
+  const photoData = photos.find(
     (item) => item.id === +thumbnail.dataset.id
   );
 
-  if (!pictureData) {
+  if (!photoData) {
     return;
   }
 
-  openBigPicture(pictureData);
-});
+  openBigPicture(photoData);
+};
 
+
+const removeThumbnails = () => {
+  document.querySelectorAll('.picture').forEach((el) => el.remove());
+};
+
+// const sortByDiscussed = () => ((a, b) => b.comments.length - a.comments.length);
+
+// const sortByRandom = () => (Math.random() - 0.5).slice(0, 10);
+
+const sortByDiscussed = () => {
+  removeThumbnails();
+  renderGallery(photos.toSorted((a, b) => b.comments.length - a.comments.length));
+};
+
+const sortByRandom = () => {
+  removeThumbnails();
+  renderGallery(photos.toSorted(() => Math.random() - 0.5).slice(0, 10));
+};
+
+
+const activeFilter = (target) => {
+  const activeButton = document.querySelector('.img-filters__button--active');
+  if (activeButton) {
+    activeButton.classList.remove('img-filters__button--active');
+  }
+  target.classList.add('img-filters__button--active');
+};
+
+debounce(imgFilters.addEventListener('click', (evt) => {
+  if (evt.target.classList.contains('img-filters__button')) {
+    activeFilter(evt.target);
+
+
+    switch (evt.target.id) {
+      case FilterTypes.RANDOM:
+        return sortByRandom();
+      case FilterTypes.DISCUSSED:
+        return sortByDiscussed();
+      default:
+        removeThumbnails();
+        return renderGallery(photos);
+    }
+  }
+}));
+
+
+export const initGallery = (data) => {
+  photos = data;
+  imgFilters.classList.remove('img-filters--inactive');
+  gallery.addEventListener('click', onOpenBigPicture);
+  renderGallery(photos);
+};
 
