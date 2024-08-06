@@ -8,14 +8,19 @@ const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_ERROR_MESSAGE = 'Неверный формат хэштэгов';
 const COMMENT_ERROR_MESSAGE = `Длина комментария не может составлять больше ${COMMENT_MAX_LENGTH} символов`;
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
+const TYPE_PHOTOS = ['jpg', 'jpeg', 'png'];
 
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
-const fileField = document.querySelector('.img-upload__input');
+const imageUploadFile = document.querySelector('.img-upload__input');
+const submitButton = document.querySelector('.img-upload__submit');
+const preview = document.querySelector('.img-upload_preview img');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
-const submitButton = form.querySelector('.img-upload__submit');
+const effectPreview = document.querySelector('.effects__preview');
+const uploadFileInput = document.querySelector('#upload-file');
+
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -86,7 +91,6 @@ const onFileInputChange = () => {
   showForm();
 };
 
-
 const toggleSubmitButton = (disabled) => {
   submitButton.disabled = disabled;
   submitButton.textContent = disabled ? SubmitButtonText.SENDING : SubmitButtonText.IDLE;
@@ -115,9 +119,37 @@ form.addEventListener('submit', (evt) => {
   }
 });
 
+
+const fileType = (file) => {
+  const fileName = file.name.toLowerCase();
+  return TYPE_PHOTOS.some((it) => fileName.endsWith(it));
+};
+
+const getPreviewFile = () => {
+  const file = imageUploadFile.files[0];
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    preview.src = reader.result;
+  };
+
+  if (file && fileType(file)) {
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = '';
+  }
+
+  effectPreview.forEach(() => {
+    preview.style.backgroundImage = `url('${preview.src}')`;
+  });
+
+  document.body.append(preview);
+};
+
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
 pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
-fileField.addEventListener('change', onFileInputChange);
+uploadFileInput.addEventListener('change', getPreviewFile);
+imageUploadFile.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
 

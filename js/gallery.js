@@ -58,37 +58,36 @@ const removeThumbnails = () => {
   document.querySelectorAll('.picture').forEach((el) => el.remove());
 };
 
-const sortByDiscussed = (photos) => photos.sort((a, b) => b.comments.length - a.comments.length);
+const sortByDiscussed = () => photos.toSorted((a, b) => b.comments.length - a.comments.length);
 
-const sortByRandom = (photos) => photos.sort(() => Math.random() - 0.5).slice(0, 10);
+const sortByRandom = () => photos.toSorted(() => Math.random() - 0.5).slice(0, 10);
 
 const activeFilter = (el) => {
   const activeButton = document.querySelector('.img-filters__button--active');
-  if (activeButton) {
-    activeButton.classList.remove('img-filters__button--active');
-  }
+  activeButton?.classList.remove('img-filters__button--active');
   el.classList.add('img-filters__button--active');
 };
 
-const debouncedFilterHandler = debounce((evt) => {
+const sortPhotos = (filter) => {
+  switch (filter) {
+    case FilterTypes.RANDOM:
+      return sortByRandom(photos);
+    case FilterTypes.DISCUSSED:
+      return sortByDiscussed(photos);
+    default:
+      return photos;
+  }
+};
+
+const onDebouncedFilter = debounce((evt) => {
   if (!evt.target.classList.contains('img-filters__button')) {
     return;
   }
 
   activeFilter(evt.target);
 
-  let sortedPhotos = [];
-  switch (evt.target.id) {
-    case FilterTypes.RANDOM:
-      sortedPhotos = sortByRandom(photos);
-      break;
-    case FilterTypes.DISCUSSED:
-      sortedPhotos = sortByDiscussed(photos);
-      break;
-    default:
-      removeThumbnails();
-      return renderGallery(photos);
-  }
+  const sortedPhotos = sortPhotos(evt.target.id);
+
   removeThumbnails();
   renderGallery(sortedPhotos);
 });
@@ -96,7 +95,7 @@ const debouncedFilterHandler = debounce((evt) => {
 export const initGallery = (data) => {
   photos = data;
   imgFilters.classList.remove('img-filters--inactive');
-  imgFilters.addEventListener('click', debouncedFilterHandler);
+  imgFilters.addEventListener('click', onDebouncedFilter);
   gallery.addEventListener('click', onGalleryClick);
   renderGallery(photos);
 };
