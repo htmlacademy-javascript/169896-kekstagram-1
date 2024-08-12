@@ -18,19 +18,3 @@ export function debounce (callback, timeoutDelay = 500) {
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 }
-
-export const createUniqueRandomIdGenerator = (min, max) => {
-  const generatedValues = [];
-
-  return function () {
-    let currentValue = getRandomInteger(min, max);
-    if (generatedValues.length >= (max - min + 1)) {
-      throw new Error(`${min} до ${max}`);
-    }
-    while (generatedValues.includes(currentValue)) {
-      currentValue = getRandomInteger(min, max);
-    }
-    generatedValues.push(currentValue);
-    return currentValue;
-  };
-};

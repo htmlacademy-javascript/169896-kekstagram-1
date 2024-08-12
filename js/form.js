@@ -19,8 +19,6 @@ const preview = document.querySelector('.img-upload_preview img');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const effectPreview = document.querySelector('.effects__preview');
-const uploadFileInput = document.querySelector('#upload-file');
-
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -119,37 +117,26 @@ form.addEventListener('submit', (evt) => {
   }
 });
 
-
-const fileType = (file) => {
-  const fileName = file.name.toLowerCase();
-  return TYPE_PHOTOS.some((it) => fileName.endsWith(it));
-};
-
 const getPreviewFile = () => {
   const file = imageUploadFile.files[0];
-  const reader = new FileReader();
 
-  reader.onloadend = () => {
-    preview.src = reader.result;
-  };
-
-  if (file && fileType(file)) {
-    reader.readAsDataURL(file);
+  if (file && TYPE_PHOTOS.some((it) => file.name.endsWith(it))) {
+    preview.src = URL.createObjectURL(file);
   } else {
     preview.src = '';
   }
 
   effectPreview.forEach(() => {
-    preview.style.backgroundImage = `url('${preview.src}')`;
+    if (preview.src) {
+      preview.style.backgroundImage = `url('${preview.src}')`;
+    }
   });
-
-  document.body.append(preview);
 };
 
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
 pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
-uploadFileInput.addEventListener('change', getPreviewFile);
+imageUploadFile.addEventListener('change', getPreviewFile);
 imageUploadFile.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
 

@@ -1,6 +1,8 @@
 import { debounce } from './utils.js';
 import { openBigPicture } from './big-picture.js';
 
+const COUNT_SORT_RANDOM = 10;
+
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 const gallery = document.querySelector('.pictures');
 const imgFilters = document.querySelector('.img-filters');
@@ -60,15 +62,15 @@ const removeThumbnails = () => {
 
 const sortByDiscussed = () => photos.toSorted((a, b) => b.comments.length - a.comments.length);
 
-const sortByRandom = () => photos.toSorted(() => Math.random() - 0.5).slice(0, 10);
+const sortByRandom = () => photos.toSorted(() => Math.random() - 0.5).slice(0, COUNT_SORT_RANDOM);
 
-const activeFilter = (el) => {
+const onActiveFilter = (el) => {
   const activeButton = document.querySelector('.img-filters__button--active');
   activeButton?.classList.remove('img-filters__button--active');
   el.classList.add('img-filters__button--active');
 };
 
-const sortPhotos = (filter) => {
+const sortPhotosByFilter = (filter) => {
   switch (filter) {
     case FilterTypes.RANDOM:
       return sortByRandom(photos);
@@ -84,9 +86,8 @@ const onDebouncedFilter = debounce((evt) => {
     return;
   }
 
-  activeFilter(evt.target);
-
-  const sortedPhotos = sortPhotos(evt.target.id);
+  onActiveFilter(evt.target);
+  const sortedPhotos = sortPhotosByFilter(evt.target.id);
 
   removeThumbnails();
   renderGallery(sortedPhotos);
