@@ -64,7 +64,7 @@ const sortByDiscussed = () => photos.toSorted((a, b) => b.comments.length - a.co
 
 const sortByRandom = () => photos.toSorted(() => Math.random() - 0.5).slice(0, COUNT_SORT_RANDOM);
 
-const onActiveFilter = (el) => {
+const setActiveFilterEl = (el) => {
   const activeButton = document.querySelector('.img-filters__button--active');
   activeButton?.classList.remove('img-filters__button--active');
   el.classList.add('img-filters__button--active');
@@ -86,7 +86,7 @@ const onDebouncedFilter = debounce((evt) => {
     return;
   }
 
-  onActiveFilter(evt.target);
+  setActiveFilterEl(evt.target);
   const sortedPhotos = sortPhotosByFilter(evt.target.id);
 
   removeThumbnails();

@@ -117,20 +117,27 @@ form.addEventListener('submit', (evt) => {
   }
 });
 
+
 const getPreviewFile = () => {
   const file = imageUploadFile.files[0];
+  const isImageFile = file && TYPE_PHOTOS.some((it) => file.name.endsWith(it));
 
-  if (file && TYPE_PHOTOS.some((it) => file.name.endsWith(it))) {
-    preview.src = URL.createObjectURL(file);
-  } else {
-    preview.src = '';
-  }
+  if (isImageFile) {
+    if (preview) {
+      preview.src = URL.createObjectURL(file);
 
-  effectPreview.forEach(() => {
-    if (preview.src) {
-      preview.style.backgroundImage = `url('${preview.src}')`;
+      if (preview.src) {
+        effectPreview.forEach(() => {
+          preview.style.backgroundImage = `url('${preview.src}')`;
+        });
+      }
     }
-  });
+  } else {
+    if (!preview) {
+      preview.src = '';
+      preview.style.backgroundImage = '';
+    }
+  }
 };
 
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
