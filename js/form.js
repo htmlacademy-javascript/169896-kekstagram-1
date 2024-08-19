@@ -120,18 +120,14 @@ form.addEventListener('submit', (evt) => {
 
 const getPreviewFile = () => {
   const file = imageUploadFile.files[0];
-  const isImageFile = file && TYPE_PHOTOS.some((it) => file.name.endsWith(it));
+  const isImgTypeValid =
+    file && TYPE_PHOTOS.some((it) => file.name.endsWith(it));
 
-  if (isImageFile) {
-    if (preview) {
-      preview.src = URL.createObjectURL(file);
-
-      if (preview.src) {
-        effectPreview.forEach(() => {
-          preview.style.backgroundImage = `url('${preview.src}')`;
-        });
-      }
-    }
+  if (isImgTypeValid && preview) {
+    preview.src = URL.createObjectURL(file);
+    effectPreview.forEach(() => {
+      preview.style.backgroundImage = `url('${preview.src}')`;
+    });
   } else {
     if (!preview) {
       preview.src = '';
