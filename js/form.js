@@ -128,7 +128,7 @@ const getPreviewFile = () => {
       preview.style.backgroundImage = `url('${preview.src}')`;
     });
   }
-  if (!preview) {
+  if (hideForm) {
     preview.src = '';
     effectPreview.forEach(() => {
       preview.style.backgroundImage = '';
