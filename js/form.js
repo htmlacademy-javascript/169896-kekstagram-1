@@ -142,4 +142,3 @@ pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 imageUploadFile.addEventListener('change', getPreviewFile);
 imageUploadFile.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
-

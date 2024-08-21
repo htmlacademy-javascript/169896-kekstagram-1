@@ -100,3 +100,5 @@ export const initGallery = (data) => {
   gallery.addEventListener('click', onGalleryClick);
   renderGallery(photos);
 };
+
+

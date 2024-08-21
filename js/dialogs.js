@@ -9,6 +9,7 @@ const successDialogTemplate = document.querySelector('#success').content.querySe
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
+    evt.stopPropagation();
     hideDialog();
   }
 };
@@ -37,7 +38,7 @@ const showDialog = (template) => {
   document.body.append(template);
   document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onDocumentKeydown, true);
-  template.querySelector('.dialog__close').addEventListener('click', () => hideDialog());
+  template.querySelector('.dialog__close')?.addEventListener('click', () => hideDialog());
 };
 
 export const showErrorDialog = () => {
@@ -56,4 +57,3 @@ export const showAlert = () => {
     dataError.remove();
   }, DATA_ERROR_SHOW_TIME);
 };
-
