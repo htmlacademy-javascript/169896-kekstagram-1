@@ -15,7 +15,7 @@ const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
 const imageUploadFile = document.querySelector('.img-upload__input');
 const submitButton = document.querySelector('.img-upload__submit');
-const preview = document.querySelector('.img-upload_preview img');
+const preview = document.querySelector('.img-upload__preview img');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
 const effectPreview = document.querySelector('.effects__preview');
@@ -37,6 +37,13 @@ const showForm = () => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
+const resetPreview = () => {
+  const effectPreviewArray = Array.from(effectPreview);
+  effectPreviewArray.forEach((element) => {
+    element.style.backgroundImage = '';
+  });
+};
+
 export const hideForm = () => {
   form.reset();
   resetScale();
@@ -45,6 +52,7 @@ export const hideForm = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
+  resetPreview();
 };
 
 const isTextFieldFocused = () =>
@@ -87,6 +95,16 @@ const onCancelButtonClick = () => {
 
 const onFileInputChange = () => {
   showForm();
+  const file = imageUploadFile.files[0];
+  const isImgTypeValid = file && TYPE_PHOTOS.some((it) => file.name.endsWith(it));
+
+  if (isImgTypeValid) {
+    preview.src = URL.createObjectURL(file);
+    const effectPreviewArray = Array.from(effectPreview);
+    effectPreviewArray.forEach((element) => {
+      element.style.backgroundImage = `url('${preview.src}')`;
+    });
+  }
 };
 
 const toggleSubmitButton = (disabled) => {
@@ -117,28 +135,8 @@ form.addEventListener('submit', (evt) => {
   }
 });
 
-
-const getPreviewFile = () => {
-  const file = imageUploadFile.files[0];
-  const isImgTypeValid = file && TYPE_PHOTOS.some((it) => file.name.endsWith(it));
-
-  if (isImgTypeValid) {
-    preview.src = URL.createObjectURL(file);
-    effectPreview.forEach(() => {
-      preview.style.backgroundImage = `url('${preview.src}')`;
-    });
-  }
-  if (hideForm) {
-    preview.src = '';
-    effectPreview.forEach(() => {
-      preview.style.backgroundImage = '';
-    });
-  }
-};
-
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
 pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
-imageUploadFile.addEventListener('change', getPreviewFile);
 imageUploadFile.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
