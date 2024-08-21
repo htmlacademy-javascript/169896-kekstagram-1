@@ -5,8 +5,8 @@ import { showAlert } from './dialogs.js';
 
 
 getData()
-  .then((data) => {
-    initGallery(data);
+  .then((pictureList) => {
+    initGallery(pictureList);
   })
   .catch((err) => {
     showAlert(err.message);

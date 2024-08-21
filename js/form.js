@@ -8,14 +8,17 @@ const COMMENT_MAX_LENGTH = 140;
 const HASHTAG_ERROR_MESSAGE = 'Неверный формат хэштэгов';
 const COMMENT_ERROR_MESSAGE = `Длина комментария не может составлять больше ${COMMENT_MAX_LENGTH} символов`;
 const TAG_PATTERN = /^#[a-za-яё0-9]{1,19}$/i;
+const TYPE_PHOTOS = ['jpg', 'jpeg', 'png'];
 
 const form = document.querySelector('.img-upload__form');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelButton = document.querySelector('.img-upload__cancel');
-const fileField = document.querySelector('.img-upload__input');
+const imageUploadFile = document.querySelector('.img-upload__input');
+const submitButton = document.querySelector('.img-upload__submit');
+const preview = document.querySelector('.img-upload__preview img');
 const hashtagField = document.querySelector('.text__hashtags');
 const commentField = document.querySelector('.text__description');
-const submitButton = form.querySelector('.img-upload__submit');
+const effectPreview = document.querySelector('.effects__preview');
 
 const SubmitButtonText = {
   IDLE: 'Опубликовать',
@@ -34,6 +37,13 @@ const showForm = () => {
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
+const resetPreview = () => {
+  const effectPreviewArray = Array.from(effectPreview);
+  effectPreviewArray.forEach((element) => {
+    element.style.backgroundImage = '';
+  });
+};
+
 export const hideForm = () => {
   form.reset();
   resetScale();
@@ -42,6 +52,7 @@ export const hideForm = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
+  resetPreview();
 };
 
 const isTextFieldFocused = () =>
@@ -84,8 +95,17 @@ const onCancelButtonClick = () => {
 
 const onFileInputChange = () => {
   showForm();
-};
+  const file = imageUploadFile.files[0];
+  const isImgTypeValid = file && TYPE_PHOTOS.some((it) => file.name.endsWith(it));
 
+  if (isImgTypeValid) {
+    preview.src = URL.createObjectURL(file);
+    const effectPreviewArray = Array.from(effectPreview);
+    effectPreviewArray.forEach((element) => {
+      element.style.backgroundImage = `url('${preview.src}')`;
+    });
+  }
+};
 
 const toggleSubmitButton = (disabled) => {
   submitButton.disabled = disabled;
@@ -118,5 +138,5 @@ form.addEventListener('submit', (evt) => {
 pristine.addValidator(hashtagField, validateHashTags, HASHTAG_ERROR_MESSAGE);
 pristine.addValidator(commentField, isCommentValid, COMMENT_ERROR_MESSAGE);
 
-fileField.addEventListener('change', onFileInputChange);
+imageUploadFile.addEventListener('change', onFileInputChange);
 cancelButton.addEventListener('click', onCancelButtonClick);
